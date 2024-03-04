@@ -1,0 +1,176 @@
+[18-Dec-2023 12:10:59 Asia/Kolkata] PHP Fatal error:  Uncaught TypeError: PDOStatement::execute(): Argument #1 ($params) must be of type ?array, string given in /home2/dstechsi/public_html/eomv2/assign-project.php:13
+Stack trace:
+#0 /home2/dstechsi/public_html/eomv2/assign-project.php(13): PDOStatement->execute()
+#1 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/assign-project.php on line 13
+[18-Dec-2023 12:11:00 Asia/Kolkata] PHP Fatal error:  Uncaught TypeError: PDOStatement::execute(): Argument #1 ($params) must be of type ?array, string given in /home2/dstechsi/public_html/eomv2/assign-project.php:13
+Stack trace:
+#0 /home2/dstechsi/public_html/eomv2/assign-project.php(13): PDOStatement->execute()
+#1 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/assign-project.php on line 13
+[18-Dec-2023 12:11:01 Asia/Kolkata] PHP Fatal error:  Uncaught TypeError: PDOStatement::execute(): Argument #1 ($params) must be of type ?array, string given in /home2/dstechsi/public_html/eomv2/assign-project.php:13
+Stack trace:
+#0 /home2/dstechsi/public_html/eomv2/assign-project.php(13): PDOStatement->execute()
+#1 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/assign-project.php on line 13
+[18-Dec-2023 12:11:03 Asia/Kolkata] PHP Fatal error:  Uncaught TypeError: PDOStatement::execute(): Argument #1 ($params) must be of type ?array, string given in /home2/dstechsi/public_html/eomv2/assign-project.php:13
+Stack trace:
+#0 /home2/dstechsi/public_html/eomv2/assign-project.php(13): PDOStatement->execute()
+#1 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/assign-project.php on line 13
+[18-Dec-2023 12:21:14 Asia/Kolkata] PHP Fatal error:  Uncaught Error: Cannot use object of type PDOStatement as array in /home2/dstechsi/public_html/eomv2/assign-pro.php:57
+Stack trace:
+#0 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/assign-pro.php on line 57
+[18-Dec-2023 12:21:17 Asia/Kolkata] PHP Fatal error:  Uncaught Error: Cannot use object of type PDOStatement as array in /home2/dstechsi/public_html/eomv2/assign-pro.php:57
+Stack trace:
+#0 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/assign-pro.php on line 57
+[18-Dec-2023 12:32:21 Asia/Kolkata] PHP Fatal error:  Uncaught Error: Cannot use object of type PDOStatement as array in /home2/dstechsi/public_html/eomv2/assign-qa.php:51
+Stack trace:
+#0 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/assign-qa.php on line 51
+[18-Dec-2023 12:32:23 Asia/Kolkata] PHP Fatal error:  Uncaught Error: Cannot use object of type PDOStatement as array in /home2/dstechsi/public_html/eomv2/assign-qa.php:51
+Stack trace:
+#0 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/assign-qa.php on line 51
+[18-Dec-2023 12:32:23 Asia/Kolkata] PHP Fatal error:  Uncaught Error: Cannot use object of type PDOStatement as array in /home2/dstechsi/public_html/eomv2/assign-qa.php:51
+Stack trace:
+#0 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/assign-qa.php on line 51
+[18-Dec-2023 12:32:23 Asia/Kolkata] PHP Fatal error:  Uncaught Error: Cannot use object of type PDOStatement as array in /home2/dstechsi/public_html/eomv2/assign-qa.php:51
+Stack trace:
+#0 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/assign-qa.php on line 51
+[18-Dec-2023 12:32:27 Asia/Kolkata] PHP Fatal error:  Uncaught Error: Cannot use object of type PDOStatement as array in /home2/dstechsi/public_html/eomv2/assign-qa.php:51
+Stack trace:
+#0 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/assign-qa.php on line 51
+[20-Dec-2023 09:14:36 Asia/Kolkata] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'vector-status' in 'where clause' in /home2/dstechsi/public_html/eomv2/project-details.php:86
+Stack trace:
+#0 /home2/dstechsi/public_html/eomv2/project-details.php(86): PDOStatement->execute()
+#1 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/project-details.php on line 86
+[20-Dec-2023 09:14:39 Asia/Kolkata] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'vector-status' in 'where clause' in /home2/dstechsi/public_html/eomv2/project-details.php:86
+Stack trace:
+#0 /home2/dstechsi/public_html/eomv2/project-details.php(86): PDOStatement->execute()
+#1 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/project-details.php on line 86
+[20-Dec-2023 15:10:24 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[20-Dec-2023 15:11:06 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[20-Dec-2023 15:21:59 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[20-Dec-2023 15:22:57 Asia/Kolkata] PHP Fatal error:  Uncaught DivisionByZeroError: Division by zero in /home2/dstechsi/public_html/eomv2/project-details.php:94
+Stack trace:
+#0 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/project-details.php on line 94
+[20-Dec-2023 15:23:04 Asia/Kolkata] PHP Fatal error:  Uncaught DivisionByZeroError: Division by zero in /home2/dstechsi/public_html/eomv2/project-details.php:94
+Stack trace:
+#0 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/project-details.php on line 94
+[20-Dec-2023 15:31:10 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[20-Dec-2023 15:51:41 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[20-Dec-2023 15:55:17 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[20-Dec-2023 16:11:11 Asia/Kolkata] PHP Fatal error:  Uncaught Error: Cannot use object of type PDOStatement as array in /home2/dstechsi/public_html/eomv2/view-efficiency.php:293
+Stack trace:
+#0 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/view-efficiency.php on line 293
+[20-Dec-2023 16:13:51 Asia/Kolkata] PHP Fatal error:  Uncaught Error: Cannot use object of type PDOStatement as array in /home2/dstechsi/public_html/eomv2/view-efficiency.php:293
+Stack trace:
+#0 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/view-efficiency.php on line 293
+[20-Dec-2023 16:20:39 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[20-Dec-2023 16:29:32 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[20-Dec-2023 16:40:28 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[20-Dec-2023 17:18:15 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[20-Dec-2023 17:23:06 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[20-Dec-2023 17:47:12 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[20-Dec-2023 17:49:47 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[20-Dec-2023 17:55:19 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[20-Dec-2023 18:02:35 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[21-Dec-2023 09:17:25 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[21-Dec-2023 12:03:15 Asia/Kolkata] PHP Fatal error:  Uncaught DivisionByZeroError: Division by zero in /home2/dstechsi/public_html/eomv2/project-details.php:94
+Stack trace:
+#0 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/project-details.php on line 94
+[21-Dec-2023 12:15:03 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[21-Dec-2023 12:15:52 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[21-Dec-2023 12:16:48 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[21-Dec-2023 12:41:06 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[21-Dec-2023 12:41:51 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[21-Dec-2023 13:14:39 Asia/Kolkata] PHP Fatal error:  Uncaught DivisionByZeroError: Division by zero in /home2/dstechsi/public_html/eomv2/task-details.php:609
+Stack trace:
+#0 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/task-details.php on line 609
+[21-Dec-2023 13:15:03 Asia/Kolkata] PHP Fatal error:  Uncaught DivisionByZeroError: Division by zero in /home2/dstechsi/public_html/eomv2/task-details.php:609
+Stack trace:
+#0 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/task-details.php on line 609
+[21-Dec-2023 13:15:15 Asia/Kolkata] PHP Fatal error:  Uncaught DivisionByZeroError: Division by zero in /home2/dstechsi/public_html/eomv2/project-details.php:94
+Stack trace:
+#0 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/project-details.php on line 94
+[21-Dec-2023 13:15:43 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[21-Dec-2023 14:32:58 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[21-Dec-2023 15:39:34 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[21-Dec-2023 15:47:33 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[21-Dec-2023 15:53:30 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[21-Dec-2023 16:55:19 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[21-Dec-2023 17:52:16 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[21-Dec-2023 18:08:33 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[21-Dec-2023 20:59:42 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[21-Dec-2023 21:00:02 Asia/Kolkata] PHP Fatal error:  Uncaught DivisionByZeroError: Division by zero in /home2/dstechsi/public_html/eomv2/profile.php:361
+Stack trace:
+#0 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/profile.php on line 361
+[21-Dec-2023 21:00:07 Asia/Kolkata] PHP Fatal error:  Uncaught DivisionByZeroError: Division by zero in /home2/dstechsi/public_html/eomv2/profile.php:361
+Stack trace:
+#0 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/profile.php on line 361
+[21-Dec-2023 21:00:24 Asia/Kolkata] PHP Fatal error:  Uncaught DivisionByZeroError: Division by zero in /home2/dstechsi/public_html/eomv2/profile.php:361
+Stack trace:
+#0 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/profile.php on line 361
+[21-Dec-2023 21:09:13 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[21-Dec-2023 21:22:12 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[21-Dec-2023 21:26:55 Asia/Kolkata] PHP Fatal error:  Uncaught DivisionByZeroError: Division by zero in /home2/dstechsi/public_html/eomv2/project-details.php:94
+Stack trace:
+#0 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/project-details.php on line 94
+[21-Dec-2023 22:30:05 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[21-Dec-2023 22:31:12 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[21-Dec-2023 22:40:39 Asia/Kolkata] PHP Fatal error:  Uncaught TypeError: date(): Argument #2 ($timestamp) must be of type ?int, string given in /home2/dstechsi/public_html/eomv2/attendance-regularisation.php:54
+Stack trace:
+#0 /home2/dstechsi/public_html/eomv2/attendance-regularisation.php(54): date()
+#1 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/attendance-regularisation.php on line 54
+[21-Dec-2023 22:40:46 Asia/Kolkata] PHP Fatal error:  Uncaught TypeError: date(): Argument #2 ($timestamp) must be of type ?int, string given in /home2/dstechsi/public_html/eomv2/attendance-regularisation.php:54
+Stack trace:
+#0 /home2/dstechsi/public_html/eomv2/attendance-regularisation.php(54): date()
+#1 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/attendance-regularisation.php on line 54
+[21-Dec-2023 22:41:12 Asia/Kolkata] PHP Fatal error:  Uncaught TypeError: date(): Argument #2 ($timestamp) must be of type ?int, string given in /home2/dstechsi/public_html/eomv2/attendance-regularisation.php:54
+Stack trace:
+#0 /home2/dstechsi/public_html/eomv2/attendance-regularisation.php(54): date()
+#1 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/attendance-regularisation.php on line 54
+[21-Dec-2023 22:41:17 Asia/Kolkata] PHP Fatal error:  Uncaught TypeError: date(): Argument #2 ($timestamp) must be of type ?int, string given in /home2/dstechsi/public_html/eomv2/attendance-regularisation.php:54
+Stack trace:
+#0 /home2/dstechsi/public_html/eomv2/attendance-regularisation.php(54): date()
+#1 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/attendance-regularisation.php on line 54
+[21-Dec-2023 22:41:21 Asia/Kolkata] PHP Fatal error:  Uncaught TypeError: date(): Argument #2 ($timestamp) must be of type ?int, string given in /home2/dstechsi/public_html/eomv2/attendance-regularisation.php:54
+Stack trace:
+#0 /home2/dstechsi/public_html/eomv2/attendance-regularisation.php(54): date()
+#1 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/attendance-regularisation.php on line 54
+[21-Dec-2023 22:52:31 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[22-Dec-2023 10:24:30 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[22-Dec-2023 11:42:45 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[22-Dec-2023 12:11:52 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[22-Dec-2023 14:18:49 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[22-Dec-2023 15:22:08 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[22-Dec-2023 15:30:18 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[22-Dec-2023 16:21:08 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[22-Dec-2023 16:50:40 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[22-Dec-2023 17:00:39 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6
+[22-Dec-2023 17:10:57 Asia/Kolkata] PHP Warning:  Undefined array key "userId" in /home2/dstechsi/public_html/eomv2/logout.php on line 6

@@ -1,0 +1,59 @@
+[20-Dec-2023 17:10:45 Asia/Kolkata] PHP Fatal error:  Uncaught Error: Call to a member function fetchAll() on null in /home2/dstechsi/public_html/eomv2/includes/settings/api/efficiencyAPi.php:385
+Stack trace:
+#0 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/includes/settings/api/efficiencyAPi.php on line 385
+[21-Dec-2023 13:24:21 Asia/Kolkata] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in /home2/dstechsi/public_html/eomv2/includes/settings/api/notificationApi.php:71
+Stack trace:
+#0 /home2/dstechsi/public_html/eomv2/includes/settings/api/notificationApi.php(71): PDOStatement->execute()
+#1 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/includes/settings/api/notificationApi.php on line 71
+[21-Dec-2023 13:24:28 Asia/Kolkata] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in /home2/dstechsi/public_html/eomv2/includes/settings/api/notificationApi.php:71
+Stack trace:
+#0 /home2/dstechsi/public_html/eomv2/includes/settings/api/notificationApi.php(71): PDOStatement->execute()
+#1 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/includes/settings/api/notificationApi.php on line 71
+[21-Dec-2023 13:24:35 Asia/Kolkata] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in /home2/dstechsi/public_html/eomv2/includes/settings/api/notificationApi.php:71
+Stack trace:
+#0 /home2/dstechsi/public_html/eomv2/includes/settings/api/notificationApi.php(71): PDOStatement->execute()
+#1 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/includes/settings/api/notificationApi.php on line 71
+[21-Dec-2023 13:24:48 Asia/Kolkata] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in /home2/dstechsi/public_html/eomv2/includes/settings/api/notificationApi.php:71
+Stack trace:
+#0 /home2/dstechsi/public_html/eomv2/includes/settings/api/notificationApi.php(71): PDOStatement->execute()
+#1 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/includes/settings/api/notificationApi.php on line 71
+[21-Dec-2023 13:24:55 Asia/Kolkata] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in /home2/dstechsi/public_html/eomv2/includes/settings/api/notificationApi.php:71
+Stack trace:
+#0 /home2/dstechsi/public_html/eomv2/includes/settings/api/notificationApi.php(71): PDOStatement->execute()
+#1 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/includes/settings/api/notificationApi.php on line 71
+[21-Dec-2023 13:25:06 Asia/Kolkata] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in /home2/dstechsi/public_html/eomv2/includes/settings/api/notificationApi.php:71
+Stack trace:
+#0 /home2/dstechsi/public_html/eomv2/includes/settings/api/notificationApi.php(71): PDOStatement->execute()
+#1 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/includes/settings/api/notificationApi.php on line 71
+[21-Dec-2023 13:25:07 Asia/Kolkata] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in /home2/dstechsi/public_html/eomv2/includes/settings/api/notificationApi.php:71
+Stack trace:
+#0 /home2/dstechsi/public_html/eomv2/includes/settings/api/notificationApi.php(71): PDOStatement->execute()
+#1 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/includes/settings/api/notificationApi.php on line 71
+[21-Dec-2023 13:25:15 Asia/Kolkata] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in /home2/dstechsi/public_html/eomv2/includes/settings/api/notificationApi.php:71
+Stack trace:
+#0 /home2/dstechsi/public_html/eomv2/includes/settings/api/notificationApi.php(71): PDOStatement->execute()
+#1 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/includes/settings/api/notificationApi.php on line 71
+[21-Dec-2023 13:25:18 Asia/Kolkata] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in /home2/dstechsi/public_html/eomv2/includes/settings/api/notificationApi.php:71
+Stack trace:
+#0 /home2/dstechsi/public_html/eomv2/includes/settings/api/notificationApi.php(71): PDOStatement->execute()
+#1 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/includes/settings/api/notificationApi.php on line 71
+[21-Dec-2023 20:34:22 Asia/Kolkata] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in /home2/dstechsi/public_html/eomv2/includes/settings/api/notificationApi.php:71
+Stack trace:
+#0 /home2/dstechsi/public_html/eomv2/includes/settings/api/notificationApi.php(71): PDOStatement->execute()
+#1 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/includes/settings/api/notificationApi.php on line 71
+[21-Dec-2023 20:34:31 Asia/Kolkata] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in /home2/dstechsi/public_html/eomv2/includes/settings/api/notificationApi.php:71
+Stack trace:
+#0 /home2/dstechsi/public_html/eomv2/includes/settings/api/notificationApi.php(71): PDOStatement->execute()
+#1 {main}
+  thrown in /home2/dstechsi/public_html/eomv2/includes/settings/api/notificationApi.php on line 71
