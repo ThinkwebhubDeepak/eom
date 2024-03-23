@@ -12,6 +12,21 @@
             $loginTime->execute([$_GET['user_id']]);
             $loginTime = $loginTime->fetch(PDO::FETCH_ASSOC);
             if($loginTime){
+
+                $preparationTime = $conn->prepare("SELECT SUM(`taken_time`) as `taken_time` FROM `projectefficiency` WHERE `type` = 'preparation' AND `user_id` = ? AND DATE(`created_at`) = CURDATE()");
+                $preparationTime->execute([$_GET['user_id']]);
+                $preparationTime =  $preparationTime->fetch(PDO::FETCH_ASSOC);
+
+                $finalizationTime = $conn->prepare("SELECT SUM(`taken_time`) as `taken_time` FROM `projectefficiency` WHERE `type` = 'finalization' AND `user_id` = ? AND DATE(`created_at`) = CURDATE()");
+                $finalizationTime->execute([$_GET['user_id']]);
+                $finalizationTime =  $finalizationTime->fetch(PDO::FETCH_ASSOC);
+
+                $feedbackTime = $conn->prepare("SELECT SUM(`taken_time`) as `taken_time` FROM `projectefficiency` WHERE `type` = 'feedback' AND `user_id` = ? AND DATE(`created_at`) = CURDATE()");
+                $feedbackTime->execute([$_GET['user_id']]);
+                $feedbackTime =  $feedbackTime->fetch(PDO::FETCH_ASSOC);
+
+                $project_time = ["preparation" => $preparationTime['taken_time'] , "finalization" => $finalizationTime['taken_time'] , "feedback" => $feedbackTime['taken_time']];
+
                 $clock_in_time = $loginTime['clock_in_time'];
                 $clock_out_time = $loginTime['clock_out_time'] ?: date("H:i:s");
                 $clock_in_datetime = new DateTime($clock_in_time);
@@ -131,7 +146,7 @@
                 }
 
 
-                $data = ["active_time" => $duration, "total_time" => $total_time, "dataTask" => $arr ,"breakData" => $breakArr , "break" => $breakTime , "task" => $taskTime];
+                $data = ["active_time" => $duration, "total_time" => $total_time, "dataTask" => $arr ,"breakData" => $breakArr , "break" => $breakTime , "task" => $taskTime , "project_time" => $project_time];
                 echo json_encode($data);
             }else{
                 http_response_code(400);
@@ -154,6 +169,21 @@
             $arr = [];
             $breakArr = [];
             foreach ($loginTimes as $loginTime) {
+
+                $preparationTime = $conn->prepare("SELECT SUM(`taken_time`) as `taken_time` FROM `projectefficiency` WHERE `type` = 'preparation' AND `user_id` = ? AND DATE(`created_at`) BETWEEN DATE_SUB(CURDATE(), INTERVAL 1 MONTH) AND CURDATE()");
+                $preparationTime->execute([$_GET['user_id']]);
+                $preparationTime =  $preparationTime->fetch(PDO::FETCH_ASSOC);
+
+                $finalizationTime = $conn->prepare("SELECT SUM(`taken_time`) as `taken_time` FROM `projectefficiency` WHERE `type` = 'finalization' AND `user_id` = ? AND DATE(`created_at`) BETWEEN DATE_SUB(CURDATE(), INTERVAL 1 MONTH) AND CURDATE()");
+                $finalizationTime->execute([$_GET['user_id']]);
+                $finalizationTime =  $finalizationTime->fetch(PDO::FETCH_ASSOC);
+
+                $feedbackTime = $conn->prepare("SELECT SUM(`taken_time`) as `taken_time` FROM `projectefficiency` WHERE `type` = 'feedback' AND `user_id` = ? AND DATE(`created_at`) BETWEEN DATE_SUB(CURDATE(), INTERVAL 1 MONTH) AND CURDATE()");
+                $feedbackTime->execute([$_GET['user_id']]);
+                $feedbackTime =  $feedbackTime->fetch(PDO::FETCH_ASSOC);
+
+                $project_time = ["preparation" => $preparationTime['taken_time'] , "finalization" => $finalizationTime['taken_time'] , "feedback" => $feedbackTime['taken_time']];
+
                     $clock_in_time = $loginTime['clock_in_time'];
                     $clock_out_time = $loginTime['clock_out_time'] ?: date("H:i:s");
                     $clock_in_datetime = new DateTime($clock_in_time);
@@ -230,7 +260,7 @@
                         $breakArr[] = ["task_id" => $break['task_id'], "time" => $break['time']];
                     } 
             }
-            $data = ["active_time" => $durations, "total_time" => $total_time, "dataTask" => $arr ,"breakData" => $breakArr , "break" => $breakTime , "task" => $taskTime];
+            $data = ["active_time" => $durations, "total_time" => $total_time, "dataTask" => $arr ,"breakData" => $breakArr , "break" => $breakTime , "task" => $taskTime , "project_time" => $project_time ];
             echo json_encode($data);
         }else{
             http_response_code(400);
@@ -249,6 +279,21 @@
             $arr = [];
             $breakArr = [];
             foreach ($loginTimes as $loginTime) {
+
+                $preparationTime = $conn->prepare("SELECT SUM(`taken_time`) as `taken_time` FROM `projectefficiency` WHERE `type` = 'preparation' AND `user_id` = ? AND DATE(`created_at`) BETWEEN DATE_SUB(CURDATE(), INTERVAL 1 YEAR) AND CURDATE()");
+                $preparationTime->execute([$_GET['user_id']]);
+                $preparationTime =  $preparationTime->fetch(PDO::FETCH_ASSOC);
+
+                $finalizationTime = $conn->prepare("SELECT SUM(`taken_time`) as `taken_time` FROM `projectefficiency` WHERE `type` = 'finalization' AND `user_id` = ? AND DATE(`created_at`) BETWEEN DATE_SUB(CURDATE(), INTERVAL 1 YEAR) AND CURDATE()");
+                $finalizationTime->execute([$_GET['user_id']]);
+                $finalizationTime =  $finalizationTime->fetch(PDO::FETCH_ASSOC);
+
+                $feedbackTime = $conn->prepare("SELECT SUM(`taken_time`) as `taken_time` FROM `projectefficiency` WHERE `type` = 'feedback' AND `user_id` = ? AND DATE(`created_at`) BETWEEN DATE_SUB(CURDATE(), INTERVAL 1 YEAR) AND CURDATE()");
+                $feedbackTime->execute([$_GET['user_id']]);
+                $feedbackTime =  $feedbackTime->fetch(PDO::FETCH_ASSOC);
+
+                $project_time = ["preparation" => $preparationTime['taken_time'] , "finalization" => $finalizationTime['taken_time'] , "feedback" => $feedbackTime['taken_time']];
+
                     $clock_in_time = $loginTime['clock_in_time'];
                     $clock_out_time = $loginTime['clock_out_time'] ?: date("H:i:s");
                     $clock_in_datetime = new DateTime($clock_in_time);
@@ -325,7 +370,7 @@
                         $breakArr[] = ["task_id" => $break['task_id'], "time" => $break['time']];
                     } 
             }
-            $data = ["active_time" => $durations, "total_time" => $total_time, "dataTask" => $arr ,"breakData" => $breakArr , "break" => $breakTime , "task" => $taskTime];
+            $data = ["active_time" => $durations, "total_time" => $total_time, "dataTask" => $arr ,"breakData" => $breakArr , "break" => $breakTime , "task" => $taskTime , "project_time" => $project_time];
             echo json_encode($data);
         }else{
             http_response_code(400);
@@ -344,6 +389,22 @@
             $arr = [];
             $breakArr = [];
             foreach ($loginTimes as $loginTime) {
+
+
+                $preparationTime = $conn->prepare("SELECT SUM(`taken_time`) as `taken_time` FROM `projectefficiency` WHERE `type` = 'preparation' AND `user_id` = ? AND DATE(`created_at`) BETWEEN ? AND ?");
+                $preparationTime->execute([$_GET['user_id'] , $_GET['start_date'] , $_GET['end_date']]);
+                $preparationTime =  $preparationTime->fetch(PDO::FETCH_ASSOC);
+
+                $finalizationTime = $conn->prepare("SELECT SUM(`taken_time`) as `taken_time` FROM `projectefficiency` WHERE `type` = 'finalization' AND `user_id` = ? AND DATE(`created_at`) BETWEEN ? AND ?");
+                $finalizationTime->execute([$_GET['user_id'] , $_GET['start_date'] , $_GET['end_date']]);
+                $finalizationTime =  $finalizationTime->fetch(PDO::FETCH_ASSOC);
+
+                $feedbackTime = $conn->prepare("SELECT SUM(`taken_time`) as `taken_time` FROM `projectefficiency` WHERE `type` = 'feedback' AND `user_id` = ? AND DATE(`created_at`) BETWEEN ? AND ?");
+                $feedbackTime->execute([$_GET['user_id'], $_GET['start_date'] , $_GET['end_date']]);
+                $feedbackTime =  $feedbackTime->fetch(PDO::FETCH_ASSOC);
+
+                $project_time = ["preparation" => $preparationTime['taken_time'] , "finalization" => $finalizationTime['taken_time'] , "feedback" => $feedbackTime['taken_time']];
+
                     $clock_in_time = $loginTime['clock_in_time'];
                     $clock_out_time = $loginTime['clock_out_time'] ?: date("H:i:s");
                     $clock_in_datetime = new DateTime($clock_in_time);
@@ -405,7 +466,7 @@
                         $breakArr[] = ["task_id" => $break['task_id'], "time" => $break['time']];
                     } 
             }
-            $data = ["active_time" => $durations, "total_time" => $total_time, "dataTask" => $arr ,"breakData" => $breakArr , "break" => $breakTime , "task" => $taskTime];
+            $data = ["active_time" => $durations, "total_time" => $total_time, "dataTask" => $arr ,"breakData" => $breakArr , "break" => $breakTime , "task" => $taskTime , "project_time" => $project_time];
             echo json_encode($data);
         }else{
             http_response_code(400);
@@ -530,4 +591,34 @@
         http_response_code(200);
         echo json_encode($data);
     }
+    
+    if (($_SERVER['REQUEST_METHOD'] == 'GET') && ($_GET['type'] == 'fetchEfficiency') && ($_GET['date'] != '')) {
+        $sql = $conn->prepare("SELECT `project_id`, `user_id`, `efficiency`, `task_id`, `profile`, `taken_time`, `total_time`, `created_at` FROM `efficiency` WHERE DATE(`created_at`) =  ? ORDER BY `created_at` DESC");
+        $sql->execute([$_GET['date']]);
+        $sql = $sql->fetchAll(PDO::FETCH_ASSOC);
+        $data = [];
+        foreach ($sql as $value) {
+            $project = $conn->prepare("SELECT `id`, `project_name` FROM `projects` WHERE `id` = ?");
+            $project->execute([$value['project_id']]);
+            $project = $project->fetch(PDO::FETCH_ASSOC);
+
+            $user = $conn->prepare("SELECT `profile` , `first_name` , `id` ,`last_name` FROM `users` WHERE `id` = ?");
+            $user->execute([$value['user_id']]);
+            $user = $user->fetch(PDO::FETCH_ASSOC);
+
+            if ($value['efficiency'] > 50) {
+                $progress = '<div class="progress" role="progressbar" aria-label="Success  striped example" aria-valuenow="' . $value['efficiency'] . '" aria-valuemin="0" aria-valuemax="100"><div class="progress-bar progress-bar-striped  bg-success" style="width: ' . $value['efficiency'] . '%">' . $value['efficiency'] . '%</div></div>';
+            } else {
+                $progress = '<div class="progress" role="progressbar" aria-label="Danger   striped example" aria-valuenow="' . $value['efficiency'] . '" aria-valuemin="0" aria-valuemax="100"><div class="progress-bar progress-bar-striped  bg-danger " style="width: ' . $value['efficiency'] . '%">' . $value['efficiency'] . '%</div></div>';
+            }
+
+            $work = $conn->prepare("SELECT `created_at` FROM `work_log` WHERE `task_id` = ? AND `project_id` = ? AND `prev_status` = ? AND `user_id` = ?");
+            $work->execute([$value['task_id'], $value['project_id'], 'assign_' . $value['profile'], $user['id']]);
+            $work = $work->fetch(PDO::FETCH_ASSOC);
+            $arr = ['efficiency' => $value['efficiency'] ,'image' => 'images/users/' . ($user['profile'] == '' ? 'default.jpg' : $user['profile']) , 'name' => $user['first_name'] . ' ' . $user['last_name'] , 'task' => $value['task_id'] , 'project' => $project['project_name'] , 'taken_time' => $value['taken_time'] , 'total_time' => $value['total_time'] , 'profile' => $value['profile'] , 'progress' => $progress , 'start' => date("j M Y, g:i A", strtotime($work['created_at'])) , 'end' => date("j M Y, g:i A", strtotime($value['created_at']))];
+            $data[] = $arr;
+        }
+        echo json_encode($data);
+    }
+
 ?>

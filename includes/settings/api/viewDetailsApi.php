@@ -26,13 +26,17 @@ if (($_SERVER['REQUEST_METHOD'] === 'GET') && ($_GET['type'] == "viewDetails")) 
 
 
 if (($_SERVER['REQUEST_METHOD'] === 'POST') && ($_POST['type'] == "addDetails")) {
-    if($_POST['user_id'] != '' && $_POST['designation'] != '' && $_POST['department'] != '' && $_POST['salary'] != '' && $_POST['account_no'] != ''  && $_POST['pen_card'] != ''  && $_POST['aadhar'] != '' && $_POST['bank_name'] != '' && $_POST['ifsc'] != '' && $_POST['leave_balanace'] != ''){
+    if($_POST['user_id'] != '' && $_POST['designation'] != '' && $_POST['department'] != '' && $_POST['account_no'] != ''  && $_POST['pen_card'] != ''  && $_POST['aadhar'] != '' && $_POST['bank_name'] != '' && $_POST['ifsc'] != '' && $_POST['leave_balanace'] != '' && $_POST['e_contact'] != ''){
         $sql = $conn->prepare("SELECT * FROM `userdetails` WHERE `user_id` = ?");
         $sql->execute([$_POST['user_id']]);
         $result = $sql->fetch(PDO::FETCH_ASSOC);
+        if($_POST['salary'] == ''){
+            $_POST['salary'] =  $result['salary'];
+        }
+        
         if($result){
-            $addDetails = $conn->prepare("UPDATE `userdetails` SET `bank_name` = ? ,`account_name` = ? ,`ifsc_code` = ?,`designation` = ?,`department` = ? ,`leave_balance` = ?,`salary` = ? , `pen_card` = ? , `aadhar` = ? WHERE `user_id` = ?");
-            $addDetails = $addDetails->execute([$_POST['bank_name'] , $_POST['account_no'] ,$_POST['ifsc'] , $_POST['designation'] ,$_POST['department'] ,$_POST['leave_balanace'] ,$_POST['salary'] , $_POST['pen_card'] , $_POST['aadhar'], $_POST['user_id']]);
+            $addDetails = $conn->prepare("UPDATE `userdetails` SET `bank_name` = ? ,`account_name` = ? ,`ifsc_code` = ?,`designation` = ?,`department` = ? ,`leave_balance` = ?,`salary` = ? , `pen_card` = ? , `aadhar` = ? , `e_contact` = ? WHERE `user_id` = ?");
+            $addDetails = $addDetails->execute([$_POST['bank_name'] , $_POST['account_no'] ,$_POST['ifsc'] , $_POST['designation'] ,$_POST['department'] ,$_POST['leave_balanace'] ,$_POST['salary'] , $_POST['pen_card'] , $_POST['aadhar'],$_POST['e_contact'] , $_POST['user_id']]);
             if($addDetails){
                 http_response_code(200);
                 echo json_encode(["message" => "Update Successfully."]);
@@ -53,6 +57,6 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST') && ($_POST['type'] == "addDetails"))
         }
     }else{
         http_response_code(400);
-        echo json_encode(["message" => "user id not found"]);
+        echo json_encode(["message" => "Fill All Required Fields."]);
     }
 }

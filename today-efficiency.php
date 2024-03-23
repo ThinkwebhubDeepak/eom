@@ -3,9 +3,9 @@
 $page_name = 'today-efficiency';
 include 'includes/header.php';
 
-if($roleId != 1 && !(in_array($page_name, $pageAccessList))){
+if ($roleId != 1 && !(in_array($page_name, $pageAccessList))) {
     echo '<script>window.location.href = "index.php"</script>';
-  } 
+}
 
 $userslist = $conn->prepare('SELECT * FROM users WHERE `is_terminated` = 0 ORDER BY `first_name` ASC');
 $userslist->execute();
@@ -53,11 +53,13 @@ $tasklist = $tasklist->fetchAll(PDO::FETCH_ASSOC);
         width: 20%;
         box-shadow: 2px 2px 20px 0px;
     }
-    .paddingbtn{
+
+    .paddingbtn {
         padding: 0 10px;
     }
+
     #uppercont,
-    #lowercont{
+    #lowercont {
         display: none;
     }
 </style>
@@ -158,106 +160,117 @@ $tasklist = $tasklist->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </div>
     <div class="container-flude px-5" id="uppercont">
-            <div class="dataView">
-                <h4 id="name"></h4>
-                <div class="row">
-                    <div class="col-12 col-sm-3">
-                        <div class="block">
-                            <h6>Pro</h6>
-                        </div>
-                        <hr>
-                        <div class="block taskdata">
-                            <ul id="prodata">
-
-                            </ul>
-                        </div>
-                        <hr>
-                        <div class="block totalprodata">
-                            <p>Total Area Sqkm : <span class="area_sqkm"></span></p>
-                            <p>Total Area Lkm : <span class="area_lkm"></span></p>
-                            <p>Total Time : <span class="total_time"></span></p>
-                            <p>Taken Time : <span class="taken_time"></span></p>
-                            <p>Total Efficiency : <span class="efficiency"></span></p>
-                        </div>
+        <div class="dataView">
+            <h4 id="name"></h4>
+            <div class="row">
+                <div class="col-12 col-sm-3">
+                    <div class="block">
+                        <h6>Pro</h6>
                     </div>
-                    <div class="col-12 col-sm-3">
-                        <div class="block">
-                            <h6>Qc</h6>
-                        </div>
-                        <hr>
-                        <div class="block taskdata">
-                            <ul id="qcdata">
+                    <hr>
+                    <div class="block taskdata">
+                        <ul id="prodata">
 
-                            </ul>
-                        </div>
-                        <hr>
-                        <div class="block totalqcdata">
-                            <p>Total Area Sqkm : <span class="area_sqkm"></span></p>
-                            <p>Total Area Lkm : <span class="area_lkm"></span></p>
-                            <p>Total Time : <span class="total_time"></span></p>
-                            <p>Taken Time : <span class="taken_time"></span></p>
-                            <p>Total Efficiency : <span class="efficiency"></span></p>
-                        </div>
+                        </ul>
                     </div>
-                    <div class="col-12 col-sm-3">
-                        <div class="block">
-                            <h6>Qa</h6>
-                        </div>
-                        <hr>
-                        <div class="block taskdata">
-                            <ul id="qadata">
-
-                            </ul>
-                        </div>
-                        <hr>
-                        <div class="block totalqadata">
-                            <p>Total Area Sqkm : <span class="area_sqkm"></span></p>
-                            <p>Total Area Lkm : <span class="area_lkm"></span></p>
-                            <p>Total Time : <span class="total_time"></span></p>
-                            <p>Taken Time : <span class="taken_time"></span></p>
-                            <p>Total Efficiency : <span class="efficiency"></span></p>
-                        </div>
-                    </div>
-                    <div class="col-12 col-sm-3">
-                        <div class="block">
-                            <h6>Vector</h6>
-                        </div>
-                        <hr>
-                        <div class="block taskdata">
-                            <ul id="vectordata">
-
-                            </ul>
-                        </div>
-                        <hr>
-                        <div class="block totalvectordata">
-                            <p>Total Area Sqkm : <span class="area_sqkm"></span></p>
-                            <p>Total Area Lkm : <span class="area_lkm"></span></p>
-                            <p>Total Time : <span class="total_time"></span></p>
-                            <p>Taken Time : <span class="taken_time"></span></p>
-                            <p>Total Efficiency : <span class="efficiency"></span></p>
-                        </div>
+                    <hr>
+                    <div class="block totalprodata">
+                        <p>Total Area Sqkm : <span class="area_sqkm"></span></p>
+                        <p>Total Area Lkm : <span class="area_lkm"></span></p>
+                        <p>Total Time : <span class="total_time"></span></p>
+                        <p>Taken Time : <span class="taken_time"></span></p>
+                        <p>Total Efficiency : <span class="efficiency"></span></p>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-12 col-sm-12">
-                        <div class="tex">
-                            <h4>Taken Active Time : <span id="total_active_time"></span></h4>
-                        </div>
-                        <div class="tex">
-                            <h4>Total Task Time : <span id="total_working_time"></span></h4>
-                        </div>
-                        <div class="tex">
-                            <h4>Total Taken Time : <span id="total_taken_time"></span></h4>
-                        </div>
-                        <div class="tex">
-                            <h4>Total Break Time : <span id="total_break_time"></span></h4>
-                        </div>
-                        <div class="tex">
-                            <h4>Total Remaining Time : <span id="total_remaning_time"></span></h4>
-                        </div>
+                <div class="col-12 col-sm-3">
+                    <div class="block">
+                        <h6>Qc</h6>
+                    </div>
+                    <hr>
+                    <div class="block taskdata">
+                        <ul id="qcdata">
+
+                        </ul>
+                    </div>
+                    <hr>
+                    <div class="block totalqcdata">
+                        <p>Total Area Sqkm : <span class="area_sqkm"></span></p>
+                        <p>Total Area Lkm : <span class="area_lkm"></span></p>
+                        <p>Total Time : <span class="total_time"></span></p>
+                        <p>Taken Time : <span class="taken_time"></span></p>
+                        <p>Total Efficiency : <span class="efficiency"></span></p>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-3">
+                    <div class="block">
+                        <h6>Qa</h6>
+                    </div>
+                    <hr>
+                    <div class="block taskdata">
+                        <ul id="qadata">
+
+                        </ul>
+                    </div>
+                    <hr>
+                    <div class="block totalqadata">
+                        <p>Total Area Sqkm : <span class="area_sqkm"></span></p>
+                        <p>Total Area Lkm : <span class="area_lkm"></span></p>
+                        <p>Total Time : <span class="total_time"></span></p>
+                        <p>Taken Time : <span class="taken_time"></span></p>
+                        <p>Total Efficiency : <span class="efficiency"></span></p>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-3">
+                    <div class="block">
+                        <h6>Vector</h6>
+                    </div>
+                    <hr>
+                    <div class="block taskdata">
+                        <ul id="vectordata">
+
+                        </ul>
+                    </div>
+                    <hr>
+                    <div class="block totalvectordata">
+                        <p>Total Area Sqkm : <span class="area_sqkm"></span></p>
+                        <p>Total Area Lkm : <span class="area_lkm"></span></p>
+                        <p>Total Time : <span class="total_time"></span></p>
+                        <p>Taken Time : <span class="taken_time"></span></p>
+                        <p>Total Efficiency : <span class="efficiency"></span></p>
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-12 col-sm-6">
+                    <div class="tex">
+                        <h4>Taken Active Time : <span id="total_active_time"></span></h4>
+                    </div>
+                    <div class="tex">
+                        <h4>Total Task Time : <span id="total_working_time"></span></h4>
+                    </div>
+                    <div class="tex">
+                        <h4>Total Taken Time : <span id="total_taken_time"></span></h4>
+                    </div>
+                    <div class="tex">
+                        <h4>Total Break Time : <span id="total_break_time"></span></h4>
+                    </div>
+                    <div class="tex">
+                        <h4>Total Ideal Time : <span id="total_remaning_time"></span></h4>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6">
+                    <div class="tex">
+                        <h4 id="preparation_time">Preparation Time : </h4>
+                    </div>
+                    <div class="tex">
+                        <h4 id="finalization_time">Finalization Time : </h4>
+                    </div>
+                    <div class="tex">
+                        <h4 id="feedback_time">Feedback Time : </h4>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="container-flude px-5" id="lowercont">
         <div class="col-xl-12 d-flex">
@@ -362,11 +375,19 @@ $tasklist = $tasklist->fetchAll(PDO::FETCH_ASSOC);
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-12 col-sm-12">
-                                <div class="tex"><h4 id="total_active_time">Taken Active Time : </h4></div>
-                                <div class="tex"><h4 id="total_working_time">Total Task Time : </h4></div>
-                                <div class="tex"><h4 id="total_worked_time">Total Taken Time : </h4></div>
-                                <div class="tex"><h4 id="total_remaning_time">Total Remaining Time : </h4></div>
+                            <div class="col-12 col-sm-6">
+                                <div class="tex">
+                                    <h4 id="total_active_time">Taken Active Time : </h4>
+                                </div>
+                                <div class="tex">
+                                    <h4 id="total_working_time">Total Task Time : </h4>
+                                </div>
+                                <div class="tex">
+                                    <h4 id="total_worked_time">Task Taken Time : </h4>
+                                </div>
+                                <div class="tex">
+                                    <h4 id="total_remaning_time">Total Ideal Time : </h4>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -440,7 +461,7 @@ $tasklist = $tasklist->fetchAll(PDO::FETCH_ASSOC);
         }
     }
 
-    function clearOldData(){
+    function clearOldData() {
         $('.totalprodata .total_time').text('');
         $('.totalprodata .taken_time').text('');
         $('.totalprodata .area_sqkm').text('');
@@ -472,7 +493,7 @@ $tasklist = $tasklist->fetchAll(PDO::FETCH_ASSOC);
     }
 
     $("#search-btn").click(() => {
-        $('#project_full_eff').css('display','none');
+        $('#project_full_eff').css('display', 'none');
         var method = $('#method').val()
         var user_id = $("#user_id").val();
         var task_id = $("#task_id").val();
@@ -483,8 +504,8 @@ $tasklist = $tasklist->fetchAll(PDO::FETCH_ASSOC);
         clearOldData();
 
         if (method == 'today' || method == 'monthly' || method == 'yearly' || method == 'date') {
-            $("#uppercont").css('display','block');
-            $("#lowercont").css('display','none');
+            $("#uppercont").css('display', 'block');
+            $("#lowercont").css('display', 'none');
             if (user_id != '') {
                 $.ajax({
                     url: 'includes/settings/api/efficiencyAPi.php',
@@ -492,9 +513,9 @@ $tasklist = $tasklist->fetchAll(PDO::FETCH_ASSOC);
                         type: 'getEfficiency',
                         user_id: user_id,
                         method: method,
-                        start_date : start_date,
-                        end_date : end_date,
-                        task_id : task_id,
+                        start_date: start_date,
+                        end_date: end_date,
+                        task_id: task_id,
                         project_id: product_id
                     },
                     dataType: 'json',
@@ -503,6 +524,12 @@ $tasklist = $tasklist->fetchAll(PDO::FETCH_ASSOC);
                         var qc = response.dataTask.qc;
                         var qa = response.dataTask.qa;
                         var vector = response.dataTask.vector;
+                        var feedback_time = response.project_time.feedback;
+                        var finalization_time = response.project_time.finalization;
+                        var preparation_time = response.project_time.preparation;
+                        $('#preparation_time').text('Preparation Time : ' + convertMinutesToHoursAndMinutes(preparation_time));
+                        $('#finalization_time').text('Finalization Time : ' + convertMinutesToHoursAndMinutes(finalization_time));
+                        $('#feedback_time').text('Feedback Time : ' + convertMinutesToHoursAndMinutes(feedback_time));
 
                         var protime = 0;
                         var qctime = 0;
@@ -536,7 +563,7 @@ $tasklist = $tasklist->fetchAll(PDO::FETCH_ASSOC);
                             $('.totalprodata .taken_time').text(convertMinutesToHoursAndMinutes(prototaltime));
                             $('.totalprodata .area_sqkm').text(prototalsqkm + ' Sqkm');
                             $('.totalprodata .area_lkm').text(prototallkm + ' Lkm');
-                            $('.totalprodata .efficiency').text(((protime/prototaltime)*100).toFixed(2) + '%');
+                            $('.totalprodata .efficiency').text(((protime / prototaltime) * 100).toFixed(2) + '%');
                         }
 
                         // for qc data
@@ -552,7 +579,7 @@ $tasklist = $tasklist->fetchAll(PDO::FETCH_ASSOC);
                             $('.totalqcdata .taken_time').text(convertMinutesToHoursAndMinutes(qctotaltime));
                             $('.totalqcdata .area_sqkm').text(qctotalsqkm + ' Sqkm');
                             $('.totalqcdata .area_lkm').text(qctotallkm + ' Lkm');
-                            $('.totalqcdata .efficiency').text(((qctime/qctotaltime)*100).toFixed(2) + '%');
+                            $('.totalqcdata .efficiency').text(((qctime / qctotaltime) * 100).toFixed(2) + '%');
                         }
 
                         // for qa data
@@ -568,7 +595,7 @@ $tasklist = $tasklist->fetchAll(PDO::FETCH_ASSOC);
                             $('.totalqadata .taken_time').text(convertMinutesToHoursAndMinutes(qatotaltime));
                             $('.totalqadata .area_sqkm').text(qatotalsqkm + ' Sqkm');
                             $('.totalqadata .area_lkm').text(qatotallkm + ' Lkm');
-                            $('.totalqadata .efficiency').text(((qatime/qatotaltime)*100).toFixed(2) + '%');
+                            $('.totalqadata .efficiency').text(((qatime / qatotaltime) * 100).toFixed(2) + '%');
                         }
 
                         // for vector data
@@ -584,13 +611,13 @@ $tasklist = $tasklist->fetchAll(PDO::FETCH_ASSOC);
                             $('.totalvectordata .taken_time').text(convertMinutesToHoursAndMinutes(vectortotaltime));
                             $('.totalvectordata .area_sqkm').text(vectortotalsqkm + ' Sqkm');
                             $('.totalvectordata .area_lkm').text(vectortotallkm + ' Lkm');
-                            $('.totalvectordata .efficiency').text(((vectortime/vectortotaltime)*100).toFixed(2) + '%');
+                            $('.totalvectordata .efficiency').text(((vectortime / vectortotaltime) * 100).toFixed(2) + '%');
                         }
 
                         $('#total_active_time').text(convertMinutesToHoursAndMinutes(response.active_time));
                         $('#total_break_time').text(convertMinutesToHoursAndMinutes(response.break));
                         $('#total_taken_time').text(convertMinutesToHoursAndMinutes(response.task));
-                        $('#total_remaning_time').text(convertMinutesToHoursAndMinutes(response.active_time - response.task - response.break));
+                        $('#total_remaning_time').text(convertMinutesToHoursAndMinutes(response.active_time - response.task - response.break - preparation_time - finalization_time - feedback_time));
                         $('#total_working_time').text(convertMinutesToHoursAndMinutes(qatime + qctime + protime + vectortime));
                     },
                     error: function(xhr, status, error) {
@@ -601,18 +628,18 @@ $tasklist = $tasklist->fetchAll(PDO::FETCH_ASSOC);
             } else {
                 notyf.error('Select User First.');
             }
-        }else{
-            $("#uppercont").css('display','none');
-            $("#lowercont").css('display','block');
+        } else {
+            $("#uppercont").css('display', 'none');
+            $("#lowercont").css('display', 'block');
             $.ajax({
                 url: 'includes/settings/api/efficiencyAPi.php',
                 data: {
                     type: 'getEfficiency',
                     user_id: user_id,
                     method: method,
-                    start_date : start_date,
-                    end_date : end_date,
-                    task_id : task_id,
+                    start_date: start_date,
+                    end_date: end_date,
+                    task_id: task_id,
                     project_id: product_id
                 },
                 dataType: 'json',
@@ -671,11 +698,11 @@ $tasklist = $tasklist->fetchAll(PDO::FETCH_ASSOC);
                 method: method,
                 product_id: product_id,
                 task_id: task_id,
-                end_date : end_date,
-                start_date:start_date
+                end_date: end_date,
+                start_date: start_date
             },
             dataType: 'json',
-            success: function (response) {
+            success: function(response) {
                 const extractedDataArray = [];
                 const extractedData = {
                     "first_name": "First Name",
@@ -716,7 +743,7 @@ $tasklist = $tasklist->fetchAll(PDO::FETCH_ASSOC);
             xhrFields: {
                 responseType: 'blob'
             },
-            success: function (result) {
+            success: function(result) {
                 var a = document.createElement('a');
                 var url = window.URL.createObjectURL(result);
                 a.href = url;
@@ -728,5 +755,4 @@ $tasklist = $tasklist->fetchAll(PDO::FETCH_ASSOC);
             }
         });
     }
-
 </script>

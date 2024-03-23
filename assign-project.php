@@ -4,20 +4,26 @@ $page_name = 'assigned-project';
 $title = 'Project List || EOM ';
 include 'includes/header.php';
 
-if(!(in_array($page_name, $pageAccessList)) && $roleId != 1){
+if (!(in_array($page_name, $pageAccessList)) && $roleId != 1) {
   echo '<script>window.location.href = "index.php"</script>';
-}  
+}
 
-$assign = $conn->prepare('SELECT * FROM `assignproject` WHERE (`user_id` = ? OR `assign_by` = ?)AND `access` = 1');
+$assign = $conn->prepare('SELECT DISTINCT(`project_id`) FROM `assignproject` WHERE (`user_id` = ? OR `assign_by` = ?)AND `access` = 1');
 $assign->execute([$userId, $userId]);
 $assign = $assign->fetchAll(PDO::FETCH_ASSOC);
 $projects = [];
 foreach ($assign as $value) {
-    $sql = $conn->prepare('SELECT * FROM `projects` WHERE `id` = ?');
-    $sql->execute([$value['project_id']]);
-    $projects[] = $sql->fetch(PDO::FETCH_ASSOC);
+  $sql = $conn->prepare('SELECT * FROM `projects` WHERE `id` = ?');
+  $sql->execute([$value['project_id']]);
+  $projects[] = $sql->fetch(PDO::FETCH_ASSOC);
 }
 
+
+if ($roleId == 1 || in_array('create-task', $pageAccessList)) {
+  $access = 0;
+} else {
+  $access = 1;
+}
 
 ?>
 <!-- <link rel="stylesheet" href="css/test2.css"> -->
@@ -45,11 +51,12 @@ foreach ($assign as $value) {
     font-size: 14px;
     z-index: 9;
   }
-  
-.scroll_bar_for_project{
-  max-height: 500px;
-  overflow-y: scroll;
-}
+
+  .scroll_bar_for_project {
+    max-height: 500px;
+    overflow-y: scroll;
+  }
+
   .complete {
     background-color: #9ae725 !important;
   }
@@ -73,8 +80,8 @@ foreach ($assign as $value) {
             ?>
               <div class=" border p-2 w-100 ">
                 <h2 class="accordion-header" id="flush-headingThree">
-                  <button class="accordion-button p-3" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse<?php echo $project['id'] ?>" aria-expanded="false" aria-controls="flush-collapse<?php echo $project['id'] ?>">
-                  <a href="project-details.php?project_id=<?php echo base64_encode($project['id']) ?>" style="text-decoration : none; font-size:14px;" class=" projectID">(<?php echo $project['project_name'] ?>)</a>
+                  <button onclick="fetchTasksAndAddToTable(<?php echo $project['id'] ?> ,<?php echo $project['vector'] ?>)" class="accordion-button p-3" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse<?php echo $project['id'] ?>" aria-expanded="false" aria-controls="flush-collapse<?php echo $project['id'] ?>">
+                    <a href="project-details.php?project_id=<?php echo base64_encode($project['id']) ?>" style="text-decoration : none; font-size:14px;" class=" projectID">(<?php echo $project['project_name'] ?>)</a>
 
                   </button>
                 </h2>
@@ -97,88 +104,36 @@ foreach ($assign as $value) {
 
             ?>
 
+
               <div class=" d-block w-100 ">
                 <div id="flush-collapse<?php echo $project['id'] ?>" class="accordion-collapse collapse" aria-labelledby="flush-heading<?php echo $project['id'] ?>" data-bs-parent="#accordionFlushExample">
                   <div class="accordion-body">
                     <div>
-
+                      <button class="btn btn-primary" style="margin-left: 90%;" onclick="inCompleteProject(<?php echo $project['id'] ?>)">In Complete</button>
                       <p>Project Id: <span><?php echo $project['id'] ?> </span> (<?php echo $project['project_name'] ?>) </p>
 
-                      <table class="table table-striped">
+                      <table id="dataTable<?php echo $project['id'] ?>" class="table table-striped">
                         <thead>
                           <tr>
+                            <th>#</th>
                             <th>Task Id</th>
-                            <th>Area Sqkm</th>
+                            <th>Area <?php echo strtoupper($project['area']) ?></th>
                             <th>Status</th>
-                            <th>Vector Status</th>
+                            <?php
+                            if ($project['vector'] == 1) {
+                              echo '<th>Vector Status</th>';
+                            }
+                            ?>
                             <th>Action</th>
                           </tr>
                         </thead>
-                        <tbody class="scroll-bar">
-                          <?php
-
-                          $sql2 = $conn->prepare("SELECT * FROM `tasks` WHERE `project_id` = ? AND `status` <> 'complete' AND `vector_status` <> 'complete' ORDER BY `updated_at` DESC");
-                          $sql2->execute([$project['id']]);
-
-                          $tasks = $sql2->fetchAll(PDO::FETCH_ASSOC);
-                          foreach ($tasks as $task) {
-
-                            $assign = $conn->prepare("SELECT * FROM `assign` WHERE `isActive` = 1 AND `project_id` = ? AND `role` != 'vector' AND `task_id` = ? AND `status` = 'assign'");
-                            $assign->execute([$task['project_id'], $task['task_id']]);
-                            $assign = $assign->fetch(PDO::FETCH_ASSOC);
-                            
-                            $assignVector = $conn->prepare("SELECT * FROM `assign` WHERE `isActive` = 1 AND `project_id` = ? AND `role` = 'vector' AND `task_id` = ? AND `status` = 'assign'");
-                            $assignVector->execute([$task['project_id'], $task['task_id']]);
-                            $assignVector = $assignVector->fetch(PDO::FETCH_ASSOC);
-
-                            $user = $conn->prepare('SELECT * FROM `users` WHERE `id` = ?');
-                            $user->execute([$assign['user_id']]);
-                            $user = $user->fetch(PDO::FETCH_ASSOC);
-                            
-                            $Vectoruser = $conn->prepare('SELECT * FROM `users` WHERE `id` = ?');
-                            $Vectoruser->execute([$assignVector['user_id']]);
-                            $Vectoruser = $Vectoruser->fetch(PDO::FETCH_ASSOC);
-
-                            $t_id = base64_encode($task['task_id']);
-                            $p_id = base64_encode($task['project_id']);
-
-                          ?>
-                            <tr>
-                              <th class><?php echo $task['task_id'] ?></th>
-                              <td><?php echo substr($task['area_sqkm'], 0, 15) ?> sqkm</td>
-                              <td>
-                                <span class="close <?php echo $task['status'] ?>" style="background-color :<?php echo $task['status'] == 'pending' ? 'rgb(248 170 170)' : 'rgb(233 248 170)'  ?>">
-                                  <?php echo str_replace('_', ' ', $task['status']) ?>
-                                </span>
-                                <span class="close" style="background-color :rgb(235 170 248)">
-                                  <?php  echo $user['first_name'] . ' ' . $user['last_name'] ?>
-                                </span>
-                              </td>
-                              <td>
-                                <span class="close <?php echo $task['status'] ?>" style="background-color :<?php echo $task['vector_status'] == 'pending' ? 'rgb(248 170 170)' : 'rgb(233 248 170)'  ?>">
-                                  <?php echo str_replace('_', ' ', $task['vector_status']) ?>
-                                </span>
-                                <span class="close" style="background-color :rgb(235 170 248)">
-                                  <?php  echo $Vectoruser['first_name'] . ' ' . $Vectoruser['last_name'] ?>
-                                </span>
-                              </td>
-                            <?php
-                              if (true) {
-                            ?>
-                                <td style="display: flex;justify-content: space-between;"><a href="task-details.php?task_id=<?php echo $t_id ?>&project_id=<?php echo $p_id ?>"><i style="color: black;" class="fas fa-info-circle"></i></a></td>
-                            <?php
-                              }
-                            ?>
-                            </tr>
-                          <?php
-                          }
-                          ?>
-                        </tbody>
+                        <tbody class="scroll-bar" id="data_insert_<?php echo $project['id'] ?>"></tbody>
                       </table>
                     </div>
                   </div>
                 </div>
               </div>
+
 
             <?php
 
@@ -197,8 +152,32 @@ foreach ($assign as $value) {
 <?php include 'includes/footer.php' ?>
 
 <script>
-  function deleteTask(task_id , project_id) {
-    Notiflix.Confirm.show('EOM Confirm','Do you wanrt to delete this task file ?','Yes','No',() => {
+  function fetchTasksAndAddToTable(id, vector) {
+    var test = $('#data_insert_' + id).html();
+    console.log(test);
+    if (test == '') {
+      Notiflix.Loading.dots();
+      $.ajax({
+        url: 'includes/settings/api/taskApi.php',
+        type: 'GET',
+        data: {
+          type: 'getDataTableComplete',
+          project_id: id,
+          vector: vector,
+          access: <?php echo $access ?>
+        },
+        success: function(response) {
+          $('#data_insert_' + id).html('');
+          $('#data_insert_' + id).html(response);
+          $('#dataTable' + id).DataTable();
+          Notiflix.Loading.remove();
+        }
+      })
+    }
+  }
+
+  function deleteTask(task_id, project_id) {
+    Notiflix.Confirm.show('EOM Confirm', 'Do you wanrt to delete this task file ?', 'Yes', 'No', () => {
       $.ajax({
         url: 'includes/settings/api/taskApi.php',
         type: 'POST',
@@ -220,8 +199,8 @@ foreach ($assign as $value) {
       });
     });
   }
-  $('.projectID').click(function(){
-    window.location.href=$(this).attr('href');
+  $('.projectID').click(function() {
+    window.location.href = $(this).attr('href');
   })
 </script>
 

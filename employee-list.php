@@ -115,16 +115,26 @@ $users = $sql->fetchAll(PDO::FETCH_ASSOC);
                 <input type="text" class="form-control" name="department" id="department" required>
               </div>
             </div>
+            <div class="col-12 col-sm-6">
+              <div class="form-group">
+                <label>Emergency Contact</label>
+                <input type="number" class="form-control" name="e_contact" id="e_contact" required>
+              </div>
+            </div>
 
           </div>
           <div class="row form-row">
-
-            <div class="col-12 col-sm-6">
-              <div class="form-group">
-                <label>Salary</label>
-                <input type="number" class="form-control" name="salary" id="salary" required>
-              </div>
-            </div>
+          <?php 
+          if ($roleId == 1 || (in_array('show-salary', $pageAccessList))) {
+            echo '<div class="col-12 col-sm-6">
+                    <div class="form-group">
+                      <label>Salary</label>
+                      <input type="number" class="form-control" name="salary" id="salary" required>
+                    </div>
+                  </div>';
+          }
+          ?>
+            
             <div class="col-12 col-sm-6">
               <div class="form-group">
                   <label>Account No</label>
@@ -214,6 +224,7 @@ $users = $sql->fetchAll(PDO::FETCH_ASSOC);
           $('#salary').val(result.salary);
           $('#aadhar').val(result.aadhar);
           $('#pen_card').val(result.pen_card);
+          $('#e_contact').val(result.e_contact);
         },
         error: function(xhr, status, error) {
           var errorMessage = xhr.responseJSON ? xhr.responseJSON.message : "Something went wrong.";

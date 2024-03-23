@@ -104,15 +104,33 @@
         $holiday->execute();
         $holiday = $holiday->fetch(PDO::FETCH_ASSOC);
         if(date('N') == 7 || $holiday)  {
-            $check = $conn->prepare('INSERT INTO `leave_bonus`(`user_id`) VALUES ( ? )');
-            $result = $check->execute([$user_id ]);
-
-            if ($result) {
-                http_response_code(200);
-                echo json_encode(array("message" => 'successfull Leave Bonus Added.', "status" => 200));
-            } else {
-                http_response_code(500);
-                echo json_encode(array("message" => 'Something went wrong', "status" => 500));
+            $sql = $conn->prepare('SELECT * FROM `attendance` WHERE date= CURDATE() AND `user_id`= ?');
+            $sql->execute([$user_id]);
+            $attendance = $sql->fetch(PDO::FETCH_ASSOC);
+            if ($attendance) {
+                $TclockInTime = strtotime($result['clock_in_time']);
+                $TclockOutTime = strtotime($result['clock_out_time']);
+                $timeDifferenceSeconds = $TclockOutTime - $TclockInTime;
+                $timeDifferenceHours = $timeDifferenceSeconds / 3600;
+                if($timeDifferenceHours < 6){
+                    http_response_code(400);
+                    echo json_encode(array("message" => 'Login Time is then 6 Hours.', "status" => 400));
+                    exit;
+                }else{
+                    $check = $conn->prepare('INSERT INTO `leave_bonus`(`user_id`) VALUES ( ? )');
+                    $result = $check->execute([$user_id ]);
+    
+                    if ($result) {
+                        http_response_code(200);
+                        echo json_encode(array("message" => 'successfull Leave Bonus Added.', "status" => 200));
+                    } else {
+                        http_response_code(500);
+                        echo json_encode(array("message" => 'Something went wrong', "status" => 500));
+                    }
+                }
+            }else{
+                http_response_code(400);
+                echo json_encode(array("message" => 'Attendance Not Found.', "status" => 400));
             }
         }else{
             http_response_code(500);

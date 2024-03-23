@@ -18,6 +18,9 @@
     .Assigned{
       background-color: yellow !important;
     }
+    .Preparation,
+    .Feedback,
+    .Finalization,
     .Working{
       background-color: rgb(19, 137, 104)  !important;
     }
@@ -72,15 +75,23 @@
                 $status = 'Working';
                 $cwork = $work['task_id'];
             }else{
+              $projectefficiency = $conn->prepare("SELECT `projectefficiency`.* , `projects`.`project_name` FROM `projectefficiency` JOIN `projects` ON `projects`.`id` = `projectefficiency`.`project_id` WHERE `projectefficiency`.`user_id` = ? AND `projectefficiency`.`status` = 'start' ORDER BY `projectefficiency`.`id` DESC");
+              $projectefficiency->execute([$user['id']]);
+              $projectefficiency = $projectefficiency->fetch(PDO::FETCH_ASSOC);
+              if($projectefficiency){
+                $status = ucfirst($projectefficiency['type']);
+                $cwork = $projectefficiency['project_name'];
+              }else{
                 $assign = $conn->prepare("SELECT * FROM `assign` WHERE `user_id` = ? AND `status` = 'assign'");
                 $assign->execute([$user['id']]);
                 $assign = $assign->fetch(PDO::FETCH_ASSOC);
                 if($assign){
                     $status = 'Assigned';
                 }else{
-                    $status = 'Un Assigned';
+                  $status = 'Un Assigned';
+                  $cwork = '';
                 }
-                $cwork = '';
+              }
             }
 
             echo '

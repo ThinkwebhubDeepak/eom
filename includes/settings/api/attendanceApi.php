@@ -8,47 +8,100 @@
 
 
     if (($_SERVER['REQUEST_METHOD'] == 'POST') && ($_POST['type'] == 'clockOut')) {
-        $sql = $conn->prepare('SELECT * FROM `attendance` WHERE date= CURDATE() AND `user_id`= ?');
-        $sql->execute([$user_id]);
-        $result = $sql->fetch(PDO::FETCH_ASSOC);
-        if ($result) {
-            if ($result['clock_out_time']) {
-                http_response_code(404);
-                echo json_encode(array("message" => 'already clockout', "status" => 404));
-                exit;
-            } else {
-                $sql = $conn->prepare('SELECT * FROM `work_log` WHERE user_id = ? ORDER BY `work_log`.`id` DESC;');
-                $sql->execute([$user_id]);
-                $sql = $sql->fetch(PDO::FETCH_ASSOC);
-                if($sql){
-
-                    if($sql['next_status'] == 'pro_in_progress' || $sql['next_status'] == 'qc_in_progress' || $sql['next_status'] == 'qa_in_progress' || $sql['next_status'] == 'vector_in_progress'){
-                        http_response_code(500);
-                        echo json_encode(array("message" => 'Pls Pause or Complete Task Brefore LogOut.', "status" => 404));
-                        exit;
+        $currentTime = new DateTime();
+        if ($currentTime->format('H:i:s') < '06:00:00') {
+            $yesterday = date('Y-m-d', strtotime('-1 day'));
+            $sql = $conn->prepare('SELECT * FROM `attendance` WHERE date = ? AND `user_id` = ?');
+            $sql->execute([$yesterday, $user_id]);
+            $result = $sql->fetch(PDO::FETCH_ASSOC);
+            if ($result) {
+                if ($result['clock_out_time']) {
+                    http_response_code(404);
+                    echo json_encode(array("message" => 'already clockout', "status" => 404));
+                    exit;
+                } else {
+                    $sql = $conn->prepare('SELECT * FROM `work_log` WHERE user_id = ? ORDER BY `work_log`.`id` DESC;');
+                    $sql->execute([$user_id]);
+                    $sql = $sql->fetch(PDO::FETCH_ASSOC);
+                    if($sql){
+    
+                        if($sql['next_status'] == 'pro_in_progress' || $sql['next_status'] == 'qc_in_progress' || $sql['next_status'] == 'qa_in_progress' || $sql['next_status'] == 'vector_in_progress'){
+                            http_response_code(500);
+                            echo json_encode(array("message" => 'Pls Pause or Complete Task Brefore LogOut.', "status" => 404));
+                            exit;
+                        }
+    
                     }
 
+                    $TclockInTime = new DateTime($result['clock_in_time']);
+                    $currentTime = new DateTime();
+                    if ($currentTime->format('H:i:s') < '06:00:00') {
+                        $currentTime->modify('-1 day');
+                    }
+
+                    $timeDifference = $currentTime->diff($TclockInTime);
+
+                    $timeDifferenceHours = $timeDifference->h + ($timeDifference->days * 24);
+                    if ($timeDifferenceHours < 5) {
+                        $not_allowed = 1;
+                    } else {
+                        $not_allowed = 0;
+                    }
+
+                    $sql = $conn->prepare('UPDATE attendance SET clock_out_time = CURRENT_TIMESTAMP , `not_allowed` = ? WHERE `date` = ? AND `user_id` = ?');
+                    $sql->execute([$not_allowed ,$yesterday , $user_id]);
+                    http_response_code(200);
+                    echo json_encode(array("message" => 'clockOut successful', "status" => 404));
                 }
-                
-                $TclockInTime = strtotime($result['clock_in_time']);
-                $currentTime = new DateTime();
-                $TclockOutTime = $currentTime->format('Y-m-d H:i:s');
-                $timeDifferenceSeconds = $TclockOutTime - $TclockInTime;
-                $timeDifferenceHours = $timeDifferenceSeconds / 3600;
-                if($timeDifferenceHours < 5){
-                    $not_allowed = 1;
-                }else{
-                    $not_allowed = 0;
-                }
-                $sql = $conn->prepare('UPDATE attendance SET clock_out_time = CURRENT_TIMESTAMP , `not_allowed` = ? WHERE `date` = CURDATE() AND `user_id` = ?');
-                $sql->execute([$not_allowed , $user_id]);
-                http_response_code(200);
-                echo json_encode(array("message" => 'clockOut successful', "status" => 404));
+    
+            } else {
+                http_response_code(404);
+                echo json_encode(array("message" => 'clockin first', "status" => 404));
             }
 
-        } else {
-            http_response_code(404);
-            echo json_encode(array("message" => 'clockin first', "status" => 404));
+        }else{
+            $sql = $conn->prepare('SELECT * FROM `attendance` WHERE date= CURDATE() AND `user_id`= ?');
+            $sql->execute([$user_id]);
+            $result = $sql->fetch(PDO::FETCH_ASSOC);
+            if ($result) {
+                if ($result['clock_out_time']) {
+                    http_response_code(404);
+                    echo json_encode(array("message" => 'already clockout', "status" => 404));
+                    exit;
+                } else {
+                    $sql = $conn->prepare('SELECT * FROM `work_log` WHERE user_id = ? ORDER BY `work_log`.`id` DESC;');
+                    $sql->execute([$user_id]);
+                    $sql = $sql->fetch(PDO::FETCH_ASSOC);
+                    if($sql){
+    
+                        if($sql['next_status'] == 'pro_in_progress' || $sql['next_status'] == 'qc_in_progress' || $sql['next_status'] == 'qa_in_progress' || $sql['next_status'] == 'vector_in_progress'){
+                            http_response_code(500);
+                            echo json_encode(array("message" => 'Pls Pause or Complete Task Brefore LogOut.', "status" => 404));
+                            exit;
+                        }
+    
+                    }
+                    
+                    $TclockInTime = strtotime($result['clock_in_time']);
+                    $currentTime = new DateTime();
+                    $TclockOutTime = $currentTime->format('Y-m-d H:i:s');
+                    $timeDifferenceSeconds = $TclockOutTime - $TclockInTime;
+                    $timeDifferenceHours = $timeDifferenceSeconds / 3600;
+                    if($timeDifferenceHours < 5){
+                        $not_allowed = 1;
+                    }else{
+                        $not_allowed = 0;
+                    }
+                    $sql = $conn->prepare('UPDATE attendance SET clock_out_time = CURRENT_TIMESTAMP , `not_allowed` = ? WHERE `date` = CURDATE() AND `user_id` = ?');
+                    $sql->execute([$not_allowed , $user_id]);
+                    http_response_code(200);
+                    echo json_encode(array("message" => 'clockOut successful', "status" => 404));
+                }
+    
+            } else {
+                http_response_code(404);
+                echo json_encode(array("message" => 'clockin first', "status" => 404));
+            }
         }
     }
 

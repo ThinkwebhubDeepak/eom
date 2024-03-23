@@ -66,17 +66,18 @@
 
       <table id="dataTable" class="display">
         <thead>
-          <tr>
+        <tr>
             <th scope="col">#</th>
             <th scope="col">Name</th>
             <th scope="col">Role</th>
             <th scope="col">Date </th>
             <th scope="col">Clock-in-time</th>
             <th scope="col">Clock-out-time</th>
+            <th>Files</th>
             <th scope="col">Efficiency</th>
             <th scope="col">Total Time / Taken Time</th>
             <th>Ideal Time / Active Time</th>
-            <th scope="col">Action</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -86,15 +87,22 @@
             $user = $conn->prepare("SELECT * FROM `users` WHERE `id` = ?");
             $user->execute([$attendance['user_id']]);
             $user = $user->fetch(PDO::FETCH_ASSOC);
-
+            
             $role = $conn->prepare("SELECT * FROM `role` WHERE `id` = ?");
             $role->execute([$user['role_id']]);
             $role = $role->fetch(PDO::FETCH_ASSOC);
 
-             // for calculate efficiency
-             $efficincy = $conn->prepare("SELECT AVG(efficiency) as totalefficiency , SUM(total_time) as totaltime , SUM(taken_time) as takentime FROM `efficiency` WHERE `user_id` = ? AND DATE(`created_at`) = ?");
-             $efficincy->execute([$user['id'] , $attendance['date']]);
-             $efficincy = $efficincy->fetch(PDO::FETCH_ASSOC);
+
+            // for calculate efficiency
+            $efficincy = $conn->prepare("SELECT COUNT(task_id) as countefficiency , SUM(total_time) as totaltime , SUM(taken_time) as takentime FROM `efficiency` WHERE `user_id` = ? AND DATE(`created_at`) = ?");
+            $efficincy->execute([$user['id'] , $attendance['date']]);
+            $efficincy = $efficincy->fetch(PDO::FETCH_ASSOC);
+
+            $break = $conn->prepare("SELECT SUM(`time`) as break_time FROM `break` WHERE DATE(`created_at`) = ? AND `user_id` = ?");
+            $break->execute([ $attendance['date'] , $attendance['user_id']]);
+            $break = $break->fetch(PDO::FETCH_ASSOC);
+
+
 
             $clock_in_time = strtotime($attendance['clock_in_time']);
 
@@ -136,16 +144,31 @@
               }else{
                 $half_status = '';
               }
-
+              
+              
+              
             } else {
+              $TclockOutTime = date('Y-m-d H:i:s');
               $attendance_clock_out = '';
-              $half_status = '';
               $ideal_hour = '';
+            }
+            
+            
+            if ($attendance['regularisation'] == 1) {
+              $is_regularisation = true;
+            } else {
+              $is_regularisation = false;
+            }
+
+            if($efficincy['takentime'] > 0){
+              $efficincy_user = ($efficincy['totaltime']/$efficincy['takentime'] * 100);
+            }else{
+              $efficincy_user = 0;
             }
 
             if($attendance['clock_out_time'] == '' && $attendance['date'] != $currentDate){
-                $regulazation = '<a onclick="addRegularisation('.$attendance['id'] .')" class="btn btn-primary">Add Regularisation</a>';
-                $status = '';
+              $regulazation = '<a onclick="addRegularisation('.$attendance['id'] .')" class="btn btn-primary">Add Regularisation</a>';
+              $status = '';
             }else{
                 if($attendance['regularisation'] == 1){
                     $status = '<span class="text-danger">Regularization Pending </span>';
@@ -158,18 +181,20 @@
             echo '
                     <tr id="row_' . $attendance['id'] . '" style="'.($ideal_time < 0.5 ? '' : 'background: #e98d8d;').'">
                       <th scope="row">' . $i . '</th>
-                      <td>' . $user['first_name'] . ' ' . $user['last_name'] . ' ' . $late_login . ' ' . $late_login_status . ' '.$half_status.'</td>
-                      <td>' .  strtoupper($role['role'])  . '</</td>
-                      <td>' .  date("d M Y",strtotime($attendance['date']))  . '</</td>
+                      <td>' . $user['first_name'] . ' ' . $user['last_name'] . ' ' . $late_login . ' ' . $late_login_status . ' ' . $half_status . '</td>
+                      <td>' . strtoupper($role['role']). '</</td>
+                      <td>' . date("d M Y",strtotime($attendance['date']))  . '</</td>
                       <td>' . date('h:i A', strtotime($attendance['clock_in_time'])) . '</td>
-                      <td class="text-'.($attendance['regularisation'] == 1 ? 'danger' : 'success').'">' . $attendance_clock_out . '</td>
-                      <td>'.(round($efficincy['totalefficiency'], 2) ?? 0).'%</td>
+                      <td class="text-'.($is_regularisation ? 'danger' : 'success').'">' . $attendance_clock_out . '</td>
+                      <td>'.$efficincy['countefficiency'].'</td>
+                      <td>'.(round($efficincy_user, 2) ?? 0).'%</td>
                       <td> <span class="text-success">'.round($efficincy['totaltime']/60 , 2).'H </span> / <span class="text-danger">'.round($efficincy['takentime']/60 , 2).'H </span> </td>
                       <td>'.$ideal_hour.'</td>
                       <td>'.$regulazation.' '.$status.'</td>
-                    </tr>
+                      </tr>
                   ';
             $i++;
+            $half_status = '';
           }
 
           ?>

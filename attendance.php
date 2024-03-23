@@ -4,9 +4,6 @@ include "includes/header.php";
 if($roleId != 1 && !(in_array($page_name, $pageAccessList))){
   echo '<script>window.location.href = "index.php"</script>';
 } 
-$attendances = $conn->prepare("SELECT * FROM `attendance` ORDER BY `created_at` DESC");
-$attendances->execute();
-$attendances = $attendances->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 <style>
@@ -80,7 +77,7 @@ $attendances = $attendances->fetchAll(PDO::FETCH_ASSOC);
         </div>
       </div>
 
-      <table id="dataTable" class="display">
+      <table id="dataTablee" class="display">
         <thead>
           <tr>
             <th scope="col">#</th>
@@ -92,120 +89,29 @@ $attendances = $attendances->fetchAll(PDO::FETCH_ASSOC);
             <th>Files</th>
             <th scope="col">Efficiency</th>
             <th scope="col">Total Time / Taken Time</th>
+            <th scope="col">Other Task</th>
             <th>Ideal Time / Active Time</th>
           </tr>
         </thead>
         <tbody>
-          <?php
-          $i = 1;
-          foreach ($attendances as $attendance) {
-            $user = $conn->prepare("SELECT * FROM `users` WHERE `id` = ?");
-            $user->execute([$attendance['user_id']]);
-            $user = $user->fetch(PDO::FETCH_ASSOC);
-            
-            $role = $conn->prepare("SELECT * FROM `role` WHERE `id` = ?");
-            $role->execute([$user['role_id']]);
-            $role = $role->fetch(PDO::FETCH_ASSOC);
 
-
-            // for calculate efficiency
-            $efficincy = $conn->prepare("SELECT COUNT(task_id) as countefficiency , SUM(total_time) as totaltime , SUM(taken_time) as takentime FROM `efficiency` WHERE `user_id` = ? AND DATE(`created_at`) = ?");
-            $efficincy->execute([$user['id'] , $attendance['date']]);
-            $efficincy = $efficincy->fetch(PDO::FETCH_ASSOC);
-
-            $break = $conn->prepare("SELECT SUM(`time`) as break_time FROM `break` WHERE DATE(`created_at`) = ? AND `user_id` = ?");
-            $break->execute([ $attendance['date'] , $attendance['user_id']]);
-            $break = $break->fetch(PDO::FETCH_ASSOC);
-
-
-
-            $clock_in_time = strtotime($attendance['clock_in_time']);
-
-            if ($clock_in_time >= strtotime('5:00 AM') && $clock_in_time <= strtotime('8:00 AM')) {
-              $late_login = '<br><span class="badge badge-danger late_login morning">Morning</span>';
-              if ($clock_in_time >= strtotime('6:45 AM')) {
-                $late_login_status = '<span class="badge badge-danger late_login">Late</span>';
-              } else {
-                $late_login_status = '';
-              }
-            } else if ($clock_in_time >= strtotime('12:00 PM') && $clock_in_time <= strtotime('3:00 PM')) {
-              $late_login = '<br><span class="badge badge-danger late_login evening">Evening</span>';
-              if ($clock_in_time > strtotime('2:45 PM')) {
-                $late_login_status = '<span class="badge badge-danger late_login">Late</span>';
-              } else {
-                $late_login_status = '';
-              }
-            } else {
-              $late_login = '<br><span class="badge badge-danger late_login general">General</span>';
-              if ($clock_in_time >= strtotime('9:15 AM')) {
-                $late_login_status = '<span class="badge badge-danger late_login">Late</span>';
-              } else {
-                $late_login_status = '';
-              }
-            }
-
-            if ($attendance['clock_out_time'] != '') {
-              $attendance_clock_out = date('h:i A', strtotime($attendance['clock_out_time']));
-              $TclockInTime = strtotime($attendance['clock_in_time']);
-              $TclockOutTime = strtotime($attendance['clock_out_time']);
-              $timeDifferenceSeconds = $TclockOutTime - $TclockInTime;
-              $timeDifferenceHours = $timeDifferenceSeconds / 3600;
-              $ideal_time = round($timeDifferenceHours - ($efficincy['takentime']/60) - ($break['break_time']/60),2);
-              $ideal_hour = ' <span class="text-success">'.$ideal_time.'H </span> / <span class="text-danger"> '.round($timeDifferenceHours , 2).'H  </span> ';
-              if($timeDifferenceHours > 5 && $timeDifferenceHours < 6.5){
-                $half_status = '<span class="badge badge-danger late_login" style="background-color: #bd00ff;">Half Day</span>';
-              }else if($timeDifferenceHours < 5 ){
-                $half_status = '<span class="badge badge-danger late_login" style="background-color: black;">Absent</span>';
-              }else{
-                $half_status = '';
-              }
-              
-              
-              
-            } else {
-              $TclockOutTime = date('Y-m-d H:i:s');
-              $attendance_clock_out = '';
-              $ideal_hour = '';
-            }
-            
-            
-            if ($attendance['regularisation'] == 1) {
-              $is_regularisation = true;
-            } else {
-              $is_regularisation = false;
-            }
-
-            if($efficincy['takentime'] > 0){
-              $efficincy_user = ($efficincy['totaltime']/$efficincy['takentime'] * 100);
-            }else{
-              $efficincy_user = 0;
-            }
-
-            echo '
-                    <tr id="row_' . $attendance['id'] . '" style="'.($ideal_time < 0.5 ? '' : 'background: #e98d8d;').'">
-                      <th scope="row">' . $i . '</th>
-                      <td>' . $user['first_name'] . ' ' . $user['last_name'] . ' ' . $late_login . ' ' . $late_login_status . ' ' . $half_status . '</td>
-                      <td>' . strtoupper($role['role']). '</</td>
-                      <td>' . date("d M Y",strtotime($attendance['date']))  . '</</td>
-                      <td>' . date('h:i A', strtotime($attendance['clock_in_time'])) . '</td>
-                      <td class="text-'.($is_regularisation ? 'danger' : 'success').'">' . $attendance_clock_out . '</td>
-                      <td>'.$efficincy['countefficiency'].'</td>
-                      <td>'.(round($efficincy_user, 2) ?? 0).'%</td>
-                      <td> <span class="text-success">'.round($efficincy['totaltime']/60 , 2).'H </span> / <span class="text-danger">'.round($efficincy['takentime']/60 , 2).'H </span> </td>
-                      <td>'.$ideal_hour.'</td>
-                      </tr>
-                  ';
-            $i++;
-            $half_status = '';
-          }
-
-          ?>
         </tbody>
       </table>
     </div>
 </main>
 <?php include "includes/footer.php" ?>
 <script>
+
+  var dataTablee = $('#dataTablee').DataTable({
+      "processing": true,
+      "serverSide": true,
+      "order": [],
+      "ajax": {
+          url: "includes/settings/api/attendanceDataTableApi.php",
+          type: "POST"
+      }
+  });
+
   document.getElementById('startDate').max = new Date().toISOString().split('T')[0];
   document.getElementById('endDate').max = new Date().toISOString().split('T')[0];
   $('#user_name').change(function() {
