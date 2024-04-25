@@ -54,7 +54,7 @@
                       <td>' . date("d M Y",strtotime($attendance['date']))  . '</td>
                       <td>' . date("h:i A", strtotime($attendance['clock_in_time'])) . '<br><span style="color:red">' . date("h:i A", strtotime($attendance['clock_out_time'])) . '</span></td>
                       <td>' . $attendance['remark'] . '</td>
-                      <td> <a class="btn btn-primary" style="margin:0 10px" onclick="approveAttendance(' . $attendance['id'] . ')">Approve</a></td>
+                      <td> <a class="btn btn-primary" style="margin:0 10px" href="#details_user" data-bs-toggle="modal" onclick="approveAttendance(' . $attendance['id'] . ',\''.$attendance['clock_out_time'].'\')">Approve</a></td>
                     </tr>
                   ';
             $i++;
@@ -66,29 +66,85 @@
     </div>
 </main>
 
+<div class="modal fade" id="details_user" aria-hidden="true" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><span id="full_name"></span> Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="approveAttendance">
+          <div class="row form-row">
+            <div class="col-12 col-sm-6 p-2">
+              <div class="form-group">
+                <label>Time</label>
+                <input type="time" class="form-control" name="time" id="time" required>
+                <input type="hidden" class="form-control" name="id" id="id" required>
+                <input type="hidden" name="type" value="approveAttendance">
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 p-2">
+            <div class="form-group">
+              <label>.</label>
+              <button type="submit" class="btn btn-primary w-100">Save</button>
+            </div></div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <?php include 'includes/footer.php' ?>
 <script>
 
-  function approveAttendance(id) {
+  function approveAttendance(id,time) {
+    $('#id').val(id);
+    $('#time').val(time);
+    // $.ajax({
+    //   type: 'POST',
+    //   url: 'includes/settings/api/attendanceApi.php',
+    //   data: {
+    //     type: 'approveAttendance',
+    //     id: id
+    //   },
+    //   dataType: 'json',
+    //   success: function (response) {
+    //     notyf.success(response.message);
+    //     $('#row_' + id).remove();
+    //   },
+    //   error: function (xhr, status, error) {
+    //     var errorMessage = xhr.responseJSON ? xhr.responseJSON.message : "Something went wrong.";
+    //     notyf.error(errorMessage);
+    //   }
+    // });
+  }
+
+  $('#approveAttendance').submit(function(e){
+    var id = $('#id').val();
+    e.preventDefault();
+    var formdata = new FormData(this);
     $.ajax({
       type: 'POST',
       url: 'includes/settings/api/attendanceApi.php',
-      data: {
-        type: 'approveAttendance',
-        id: id
-      },
+      data: formdata,
+      processData: false,
+      cache: false,
+      contentType: false,
       dataType: 'json',
       success: function (response) {
         notyf.success(response.message);
         $('#row_' + id).remove();
+        location.reload();
       },
       error: function (xhr, status, error) {
         var errorMessage = xhr.responseJSON ? xhr.responseJSON.message : "Something went wrong.";
         notyf.error(errorMessage);
       }
     });
-  }
+  });
 
   
 </script>

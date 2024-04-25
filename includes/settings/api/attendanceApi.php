@@ -33,6 +33,15 @@
     
                     }
 
+                    $psql = $conn->prepare("SELECT * FROM `projectefficiency` WHERE user_id = ? AND `status` = 'start' ORDER BY `id` DESC;");
+                    $psql->execute([$user_id]);
+                    $psql = $psql->fetch(PDO::FETCH_ASSOC);
+                    if($psql){
+                            http_response_code(500);
+                            echo json_encode(array("message" => 'Pls Pause or Complete Other Task Brefore LogOut.', "status" => 404));
+                            exit;    
+                    }
+
                     $TclockInTime = new DateTime($result['clock_in_time']);
                     $currentTime = new DateTime();
                     if ($currentTime->format('H:i:s') < '06:00:00') {
@@ -80,6 +89,15 @@
                             exit;
                         }
     
+                    }
+
+                    $psql = $conn->prepare("SELECT * FROM `projectefficiency` WHERE user_id = ? AND `status` = 'start' ORDER BY `id` DESC;");
+                    $psql->execute([$user_id]);
+                    $psql = $psql->fetch(PDO::FETCH_ASSOC);
+                    if($psql){
+                            http_response_code(500);
+                            echo json_encode(array("message" => 'Pls Pause or Complete Other Task Brefore LogOut.', "status" => 404));
+                            exit;    
                     }
                     
                     $TclockInTime = strtotime($result['clock_in_time']);
@@ -142,8 +160,8 @@
     }
 
     if (($_SERVER['REQUEST_METHOD'] == 'POST') && ($_POST['type'] == 'approveAttendance')) {
-        $sql = $conn->prepare("UPDATE `attendance` SET `regularisation` = 0 WHERE `id` = ?");
-        $result = $sql->execute([$_POST['id']]);
+        $sql = $conn->prepare("UPDATE `attendance` SET `regularisation` = 0 , `clock_out_time` = ? WHERE `id` = ?");
+        $result = $sql->execute([$_POST['time'] , $_POST['id']]);
         if ($result) {
             http_response_code(200);
             echo json_encode(array("message" => 'Approve Regularisation successful', "status" => 200));

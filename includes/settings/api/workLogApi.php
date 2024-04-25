@@ -52,7 +52,7 @@ function efficiencyAdd($conn ,$user_id , $task_id , $project_id, $role){
     $sql_query = $conn->prepare("SELECT SUM(taken_time) AS total_taken_time FROM `work_log` WHERE `user_id` = ? AND `task_id` = ? AND `project_id` = ? AND `id` > ? ");
     $sql_query->execute([$user_id ,$task_id, $project_id , $workHoursforTime['id']]);
     $result = $sql_query->fetch(PDO::FETCH_ASSOC);
-    $taken_time = $result['total_taken_time'] == '' ? 0 : $result['total_taken_time'];
+    $taken_time = $result['total_taken_time'] == '' ? 0.000001 : $result['total_taken_time'];
 
     $efficiency = ($totalTime / $taken_time ) * 100;
 
@@ -178,11 +178,12 @@ if (($_SERVER['REQUEST_METHOD'] == 'POST') && ($_POST['type'] == 'reAssignTask')
                 $task = $conn->prepare("UPDATE `tasks` SET `is_reassigned`= 1 , `status` = ? WHERE `task_id` = ? AND `project_id` = ?");
                 $task->execute(["assign_pro",$_POST['task_id'],$_POST['project_id']]);
 
+                $efficiency = $conn->prepare("UPDATE `efficiency` SET `efficiency` = ? , `remarks` = ? WHERE `id` = ?");
+                $efficiency->execute([$checkEfficiency['efficiency'] / 2, "fail" ,$checkEfficiency['id']]);
+                
                 $worklog = $conn->prepare("INSERT INTO `work_log`(`user_id`, `task_id`, `project_id`, `prev_status`, `next_status`, `remarks` ,`change_type`) VALUES (? , ? , ? , 'in_progress' , 'in_progress' , 'assign'  ,'ressigned')");
                 $worklog->execute([$_POST['user_id'],$_POST['task_id'],$_POST['project_id']]);
                 
-                $efficiency = $conn->prepare("UPDATE `efficiency` SET `efficiency` = ? , `remarks` = ? WHERE `id` = ?");
-                $efficiency->execute([$checkEfficiency['efficiency'] / 2, "fail" ,$checkEfficiency['id']]);
                     
         
                 http_response_code(200);

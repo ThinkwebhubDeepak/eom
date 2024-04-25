@@ -13,6 +13,28 @@
         $projectefficiencys = $projectefficiencys->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    function convertMinutesToHours($minutes) {
+        $minutes = round($minutes);
+        if (!is_numeric($minutes) || $minutes < 0) {
+            return "Invalid input";
+        }
+    
+        $hours = floor($minutes / 60);
+        $remainingMinutes = $minutes % 60;
+    
+        $hourString = ($hours == 1) ? "hr" : "hr";
+        $minuteString = ($remainingMinutes == 1) ? "m" : "m";
+    
+        if ($hours == 0) {
+            return "{$remainingMinutes} {$minuteString}";
+        } elseif ($remainingMinutes == 0) {
+            return "{$hours} {$hourString}";
+        } else {
+            return "{$hours} {$hourString}, {$remainingMinutes} {$minuteString}";
+        }
+    }
+    
+
 
 ?>
 
@@ -64,18 +86,23 @@
                         $user->execute([$value['user_id']]);
                         $user = $user->fetch(PDO::FETCH_ASSOC);
 
-                        $project = $conn->prepare('SELECT `project_name` FROM `projects` WHERE `id` = ?');
-                        $project->execute([$value['project_id']]);
-                        $project = $project->fetch(PDO::FETCH_ASSOC);
+                        if($value['project_id'] == 0){
+                            $project_time = 'R&D';
+                        }else{
+                            $project = $conn->prepare('SELECT `project_name` FROM `projects` WHERE `id` = ?');
+                            $project->execute([$value['project_id']]);
+                            $project = $project->fetch(PDO::FETCH_ASSOC);
+                            $project_time = $project['project_name'];
+                        }
 
                         echo '
                                 <tr id="row_' . $value['id'] . '">
                                 <th scope="row">' . $i . '</th>
                                 <td>' . $user['employee_id'] . '</td>
                                 <td>' . $user['first_name'] . ' ' . $user['last_name'] . '</td>
-                                <td>' . $project['project_name'] . '</</td>
+                                <td>' . $project_time . ''.($value['task'] != '' ? ' ('.$value['task'].') ' : '').'</</td>
                                 <td>' . ucfirst($value['type']) . '</td>
-                                <td>' .  $value['taken_time'].'m</td>
+                                <td>' .  convertMinutesToHours($value['taken_time']).'</td>
                                 <td class="text-danger">' . date('d M, Y h:i A', strtotime($value['created_at'])) . '</</td>
                                 <td class="text-success">' . date('d M, Y h:i A', strtotime($value['updated_at'])) . '</</td>
                                 </tr>

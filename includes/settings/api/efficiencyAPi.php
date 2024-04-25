@@ -25,7 +25,11 @@
                 $feedbackTime->execute([$_GET['user_id']]);
                 $feedbackTime =  $feedbackTime->fetch(PDO::FETCH_ASSOC);
 
-                $project_time = ["preparation" => $preparationTime['taken_time'] , "finalization" => $finalizationTime['taken_time'] , "feedback" => $feedbackTime['taken_time']];
+                $trainingTime = $conn->prepare("SELECT SUM(`taken_time`) as `taken_time` FROM `projectefficiency` WHERE `type` = 'training' AND `user_id` = ? AND DATE(`created_at`) = CURDATE()");
+                $trainingTime->execute([$_GET['user_id']]);
+                $trainingTime =  $trainingTime->fetch(PDO::FETCH_ASSOC);
+
+                $project_time = ["preparation" => $preparationTime['taken_time'] , "finalization" => $finalizationTime['taken_time'] , "feedback" => $feedbackTime['taken_time'], "training" => $trainingTime['taken_time']];
 
                 $clock_in_time = $loginTime['clock_in_time'];
                 $clock_out_time = $loginTime['clock_out_time'] ?: date("H:i:s");
@@ -182,7 +186,11 @@
                 $feedbackTime->execute([$_GET['user_id']]);
                 $feedbackTime =  $feedbackTime->fetch(PDO::FETCH_ASSOC);
 
-                $project_time = ["preparation" => $preparationTime['taken_time'] , "finalization" => $finalizationTime['taken_time'] , "feedback" => $feedbackTime['taken_time']];
+                $trainingTime = $conn->prepare("SELECT SUM(`taken_time`) as `taken_time` FROM `projectefficiency` WHERE `type` = 'training' AND `user_id` = ? AND DATE(`created_at`) BETWEEN DATE_SUB(CURDATE(), INTERVAL 1 MONTH) AND CURDATE()");
+                $trainingTime->execute([$_GET['user_id']]);
+                $trainingTime =  $trainingTime->fetch(PDO::FETCH_ASSOC);
+
+                $project_time = ["preparation" => $preparationTime['taken_time'] , "finalization" => $finalizationTime['taken_time'] , "feedback" => $feedbackTime['taken_time'], "training" => $trainingTime['taken_time']];
 
                     $clock_in_time = $loginTime['clock_in_time'];
                     $clock_out_time = $loginTime['clock_out_time'] ?: date("H:i:s");
@@ -292,7 +300,11 @@
                 $feedbackTime->execute([$_GET['user_id']]);
                 $feedbackTime =  $feedbackTime->fetch(PDO::FETCH_ASSOC);
 
-                $project_time = ["preparation" => $preparationTime['taken_time'] , "finalization" => $finalizationTime['taken_time'] , "feedback" => $feedbackTime['taken_time']];
+                $trainingTime = $conn->prepare("SELECT SUM(`taken_time`) as `taken_time` FROM `projectefficiency` WHERE `type` = 'training' AND `user_id` = ? AND DATE(`created_at`) BETWEEN DATE_SUB(CURDATE(), INTERVAL 1 YEAR) AND CURDATE()");
+                $trainingTime->execute([$_GET['user_id']]);
+                $trainingTime =  $trainingTime->fetch(PDO::FETCH_ASSOC);
+
+                $project_time = ["preparation" => $preparationTime['taken_time'] , "finalization" => $finalizationTime['taken_time'] , "feedback" => $feedbackTime['taken_time'], "training" => $trainingTime['taken_time']];
 
                     $clock_in_time = $loginTime['clock_in_time'];
                     $clock_out_time = $loginTime['clock_out_time'] ?: date("H:i:s");
@@ -403,8 +415,12 @@
                 $feedbackTime->execute([$_GET['user_id'], $_GET['start_date'] , $_GET['end_date']]);
                 $feedbackTime =  $feedbackTime->fetch(PDO::FETCH_ASSOC);
 
-                $project_time = ["preparation" => $preparationTime['taken_time'] , "finalization" => $finalizationTime['taken_time'] , "feedback" => $feedbackTime['taken_time']];
+                $trainingTime = $conn->prepare("SELECT SUM(`taken_time`) as `taken_time` FROM `projectefficiency` WHERE `type` = 'training' AND `user_id` = ? AND DATE(`created_at`) BETWEEN ? AND ?");
+                $trainingTime->execute([$_GET['user_id'], $_GET['start_date'] , $_GET['end_date']]);
+                $trainingTime =  $trainingTime->fetch(PDO::FETCH_ASSOC);
 
+                $project_time = ["preparation" => $preparationTime['taken_time'] , "finalization" => $finalizationTime['taken_time'] , "feedback" => $feedbackTime['taken_time'], "training" => $trainingTime['taken_time']];
+                
                     $clock_in_time = $loginTime['clock_in_time'];
                     $clock_out_time = $loginTime['clock_out_time'] ?: date("H:i:s");
                     $clock_in_datetime = new DateTime($clock_in_time);
@@ -431,6 +447,21 @@
                             $taskDetails->execute([$value['task_id']]);
                             $taskDetails = $taskDetails->fetch(PDO::FETCH_ASSOC);
 
+                            $projectDetails = $conn->prepare("SELECT * FROM `projects` WHERE `id` = ?");
+                            $projectDetails->execute([$taskDetails['project_id']]);
+                            $projectDetails = $projectDetails->fetch(PDO::FETCH_ASSOC);
+
+                            switch ($projectDetails['area']) {
+                                case 'sqkm':
+                                    $taskDetails['area_lkm'] =  0;
+                                    break;
+                                
+                                case 'lkm':
+                                    $taskDetails['area_lkm'] =  $taskDetails['area_sqkm'];
+                                    $taskDetails['area_sqkm'] = 0;
+                                    break;
+                            }
+
                             switch ($workLog['next_status']) {
                                 case 'pro_in_progress':
                                     $role = 'pro';
@@ -455,7 +486,7 @@
                             }
                         }
 
-                        $arr[$role][] = ["task_id" => $value['task_id'] , "percentage" => $workPercentage > 100 ? 100 : $workPercentage , "time" => $time , "task_time" => $taskDetails['estimated_hour'] * 60 * $part , "area_sqkm" => floatval($taskDetails['area_sqkm'])];
+                        $arr[$role][] = ["task_id" => $value['task_id'] , "percentage" => $workPercentage > 100 ? 100 : $workPercentage , "time" => $time , "task_time" => $taskDetails['estimated_hour'] * 60 * $part , "area_sqkm" => floatval($taskDetails['area_sqkm']),  "area_lkm" => floatval($taskDetails['area_lkm'])];
                     }
     
                     $breaks = $conn->prepare("SELECT * FROM `break` WHERE DATE(`created_at`) = ? AND `user_id` = ?");

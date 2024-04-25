@@ -153,6 +153,10 @@ $finalization = $finalization->fetch(PDO::FETCH_ASSOC);
 $feedback = $conn->prepare("SELECT `user_id` FROM `projectefficiency` WHERE `user_id` = ? AND `project_id` = ? AND `type` = 'feedback' AND `status` = 'start'");
 $feedback->execute([$_SESSION['userId'], $project_id]);
 $feedback = $feedback->fetch(PDO::FETCH_ASSOC);
+
+$training = $conn->prepare("SELECT `user_id` FROM `projectefficiency` WHERE `user_id` = ? AND `project_id` = ? AND `type` = 'training' AND `status` = 'start'");
+$training->execute([$_SESSION['userId'], $project_id]);
+$training = $training->fetch(PDO::FETCH_ASSOC);
 ?>
 
 <style>
@@ -561,6 +565,10 @@ $feedback = $feedback->fetch(PDO::FETCH_ASSOC);
       $feedbackTime->execute();
       $feedbackTime =  $feedbackTime->fetch(PDO::FETCH_ASSOC);
 
+      $trainingTime = $conn->prepare("SELECT SUM(`taken_time`) as `taken_time` FROM `projectefficiency` WHERE `type` = 'training' AND `project_id` = $project_id");
+      $trainingTime->execute();
+      $trainingTime =  $trainingTime->fetch(PDO::FETCH_ASSOC);
+
       ?>
       <h6 class="p-2">Task Time Details : </h6>
       <div class="card-body d-flex justify-content-sm-between">
@@ -597,7 +605,7 @@ $feedback = $feedback->fetch(PDO::FETCH_ASSOC);
         <div class="box">
           <p>Total : <?php echo  count($completetasks)  ?> / <?php echo count($tasks) ?></p>
           <p>Total Area: <span class="vector_area"></span><?php echo totalAreaSquare($conn, $project_id, '') ?> <?php echo $project['area'] ?>.</p>
-          <p>Project Time: <span class="vector_eff"><?php echo $task_taken_time =  convertMinutesToHoursAndMinutes($feedbackTime['taken_time'] + $finalizationTime['taken_time'] + $preparationTime['taken_time'] + $utt = ($pro['total_taken_time'] + $qc['total_taken_time'] + $qa['total_taken_time'] + $vector['total_taken_time'])) ?></span> . <a href="#exampleModalCenter" data-bs-toggle="modal"> <i class="fa-solid fa-circle-info"></i> </a></p>
+          <p>Project Time: <span class="vector_eff"><?php echo $task_taken_time =  convertMinutesToHoursAndMinutes($feedbackTime['taken_time'] + $trainingTime['taken_time'] + $finalizationTime['taken_time'] + $preparationTime['taken_time'] + $utt = ($pro['total_taken_time'] + $qc['total_taken_time'] + $qa['total_taken_time'] + $vector['total_taken_time'])) ?></span> . <a href="#exampleModalCenter" data-bs-toggle="modal"> <i class="fa-solid fa-circle-info"></i> </a></p>
           <p>Total Time: <span class="vector_eff_total"><?php echo convertMinutesToHoursAndMinutes($uot = ($pro['total_total_time'] + $qc['total_total_time'] + $qa['total_total_time'] + $vector['total_total_time'])) ?></span> .</p>
           <p>Total Effi.: <span class="vector_eff_cal"><?php echo $utt > 0 ? number_format(($uot / $utt) * 100, 2) : 0 ?></span>%</p>
         </div>
@@ -682,7 +690,8 @@ $feedback = $feedback->fetch(PDO::FETCH_ASSOC);
             <p>Preparation Taken: <span class="vector_eff"><?php echo convertMinutesToHoursAndMinutes($preparationTime['taken_time']) ?></span> .</p>
             <p>Finalization Taken: <span class="vector_eff"><?php echo convertMinutesToHoursAndMinutes($finalizationTime['taken_time']) ?></span> .</p>
             <p>Feedback Taken: <span class="vector_eff"><?php echo convertMinutesToHoursAndMinutes($feedbackTime['taken_time']) ?></span> .</p>
-            <p>Total Project Taken: <span class="vector_eff"><?php echo convertMinutesToHoursAndMinutes($feedbackTime['taken_time'] + $finalizationTime['taken_time'] + $preparationTime['taken_time'] + $utt) ?></span> .</p>
+            <p>Training Taken: <span class="vector_eff"><?php echo convertMinutesToHoursAndMinutes($trainingTime['taken_time']) ?></span> .</p>
+            <p>Total Project Taken: <span class="vector_eff"><?php echo convertMinutesToHoursAndMinutes($feedbackTime['taken_time'] + $trainingTime['taken_time'] + $finalizationTime['taken_time'] + $preparationTime['taken_time'] + $utt) ?></span> .</p>
           </div>
         </div>
         <div class="modal-footer">

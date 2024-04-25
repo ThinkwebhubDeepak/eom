@@ -1,9 +1,32 @@
 <?php
 
 include '../config/config.php';
+
+function convertMinutesToHours($minutes) {
+    $minutes = round($minutes);
+    if (!is_numeric($minutes) || $minutes < 0) {
+        return "Invalid input";
+    }
+
+    $hours = floor($minutes / 60);
+    $remainingMinutes = $minutes % 60;
+
+    $hourString = ($hours == 1) ? "hr" : "hr";
+    $minuteString = ($remainingMinutes == 1) ? "m" : "m";
+
+    if ($hours == 0) {
+        return "{$remainingMinutes} {$minuteString}";
+    } elseif ($remainingMinutes == 0) {
+        return "{$hours} {$hourString}";
+    } else {
+        return "{$hours} {$hourString}, {$remainingMinutes} {$minuteString}";
+    }
+}
+
+
 $query = "SELECT efficiency.id, efficiency.project_id, efficiency.user_id, efficiency.task_id, efficiency.updated_at, efficiency.efficiency,efficiency.profile,efficiency.taken_time, efficiency.total_time ,`users`.`first_name`,`users`.`last_name` , `projects`.`project_name` , `work_log`.`created_at`  FROM `efficiency` JOIN `users` ON `efficiency`.`user_id` = `users`.`id`  JOIN `projects` ON `efficiency`.`project_id` = `projects`.`id` JOIN `work_log` ON `efficiency`.`task_id` = `work_log`.`task_id` AND `efficiency`.`project_id` = `work_log`.`project_id` AND `efficiency`.`user_id` = `work_log`.`user_id` AND CONCAT('assign_',`efficiency`.`profile`) = `work_log`.`prev_status`";
 
-$column = array("id", "first_name", "task_id", "project_name", "taken_time", "total_time", "taken_time", "total_time");
+$column = array("id", "first_name", "task_id", "project_name", "taken_time", "total_time", "taken_time", "total_time","profile","efficiency");
 
 if (isset($_POST["search"]["value"])) {
     $query .= '
@@ -43,8 +66,8 @@ foreach ($result as $row) {
     $sub_array[] = $row['first_name'] . $row['last_name'];
     $sub_array[] = $row['task_id'];
     $sub_array[] = $row['project_name'];
-    $sub_array[] = $row['taken_time'] . 'm';
-    $sub_array[] = $row['total_time'] . 'm';
+    $sub_array[] = convertMinutesToHours($row['taken_time']);
+    $sub_array[] = convertMinutesToHours($row['total_time']);
     $sub_array[] = ucfirst($row['profile']);
     $sub_array[] = round($row['efficiency'], 2) . '%';
     $sub_array[] = date('d M, Y h:i A', strtotime($row['created_at']));

@@ -76,6 +76,7 @@
             <th>Files</th>
             <th scope="col">Efficiency</th>
             <th scope="col">Total Time / Taken Time</th>
+            <th>Other Time</th>
             <th>Ideal Time / Active Time</th>
             <th>Action</th>
           </tr>
@@ -101,6 +102,10 @@
             $break = $conn->prepare("SELECT SUM(`time`) as break_time FROM `break` WHERE DATE(`created_at`) = ? AND `user_id` = ?");
             $break->execute([ $attendance['date'] , $attendance['user_id']]);
             $break = $break->fetch(PDO::FETCH_ASSOC);
+
+            $project_time = $conn->prepare("SELECT COUNT(`taken_time`) as `totaltime` FROM `projectefficiency` WHERE DATE(`created_at`) = ? AND `user_id` = ?");
+            $project_time->execute([$attendance['date'], $attendance['user_id']]);
+            $project_time = $project_time->fetch(PDO::FETCH_ASSOC);
 
 
 
@@ -135,7 +140,7 @@
               $TclockOutTime = strtotime($attendance['clock_out_time']);
               $timeDifferenceSeconds = $TclockOutTime - $TclockInTime;
               $timeDifferenceHours = $timeDifferenceSeconds / 3600;
-              $ideal_time = round($timeDifferenceHours - ($efficincy['takentime']/60) - ($break['break_time']/60),2);
+              $ideal_time = round($timeDifferenceHours - ($efficincy['takentime']/60) - ($project_time['totaltime']/60) - ($break['break_time']/60),2);
               $ideal_hour = ' <span class="text-success">'.$ideal_time.'H </span> / <span class="text-danger"> '.round($timeDifferenceHours , 2).'H  </span> ';
               if($timeDifferenceHours > 5 && $timeDifferenceHours < 6.5){
                 $half_status = '<span class="badge badge-danger late_login" style="background-color: #bd00ff;">Half Day</span>';
@@ -189,6 +194,7 @@
                       <td>'.$efficincy['countefficiency'].'</td>
                       <td>'.(round($efficincy_user, 2) ?? 0).'%</td>
                       <td> <span class="text-success">'.round($efficincy['totaltime']/60 , 2).'H </span> / <span class="text-danger">'.round($efficincy['takentime']/60 , 2).'H </span> </td>
+                      <td>'.round($project_time['totaltime']/60 , 2).'H </td>
                       <td>'.$ideal_hour.'</td>
                       <td>'.$regulazation.' '.$status.'</td>
                       </tr>

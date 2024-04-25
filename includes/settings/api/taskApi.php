@@ -236,7 +236,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['type'] === 'inProgress') {
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && $_GET['type'] === 'getDataTable') {
     if (!empty($_GET['project_id'])) {
         $i = 0;
-
+        
         if ($_GET['vector'] == 1) {
             $sql2 = $conn->prepare("SELECT * FROM `tasks` WHERE `project_id` = ? AND `status` <> 'complete' AND `vector_status` <> 'complete' ORDER BY `updated_at` DESC");
         } else {
@@ -245,6 +245,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && $_GET['type'] === 'getDataTable') {
 
         $sql2->execute([$_GET['project_id']]);
         $tasks = $sql2->fetchAll(PDO::FETCH_ASSOC);
+        // echo json_decode($task);
+        // exit;
 
         foreach ($tasks as $task) {
             $assign = $conn->prepare("SELECT `user_id` FROM `assign` WHERE `isActive` = 1 AND `project_id` = ? AND `role` != 'vector' AND `task_id` = ? AND `status` = 'assign'");
@@ -259,9 +261,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && $_GET['type'] === 'getDataTable') {
             $user->execute([$assign['user_id']]);
             $user = $user->fetch(PDO::FETCH_ASSOC);
 
-            $Vectoruser = $conn->prepare('SELECT first_name , last_name FROM `users` WHERE `id` = ?');
-            $Vectoruser->execute([$assignVector['user_id']]);
-            $Vectoruser = $Vectoruser->fetch(PDO::FETCH_ASSOC);
+            if ($_GET['vector'] == 1) {
+                $Vectoruser = $conn->prepare('SELECT first_name , last_name FROM `users` WHERE `id` = ?');
+                $Vectoruser->execute([$assignVector['user_id']]);
+                $Vectoruser = $Vectoruser->fetch(PDO::FETCH_ASSOC);
+            }
 
             $t_id = base64_encode($task['task_id']);
             $p_id = base64_encode($task['project_id']);

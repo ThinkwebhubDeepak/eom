@@ -16,12 +16,12 @@ if($todayholiday){
 
 
 // for get birthday details
-$bday_users = $conn->prepare("SELECT * FROM `users` WHERE MONTH(`dob`) = MONTH(CURTIME()) AND DAY(`dob`) > DAY(CURTIME())  ORDER BY DAY(`dob`) ASC");
+$bday_users = $conn->prepare("SELECT * FROM `users` WHERE `is_terminated` = 0 AND MONTH(`dob`) = MONTH(CURTIME()) AND DAY(`dob`) > DAY(CURTIME())  ORDER BY DAY(`dob`) ASC");
 $bday_users->execute();
 $bday_users = $bday_users->fetchAll(PDO::FETCH_ASSOC);
 
 // for get birthday details
-$check_enivs = $conn->prepare("SELECT * FROM `users` WHERE MONTH(`created_at`) = MONTH(CURTIME()) AND DAY(`created_at`) > DAY(CURTIME())  ORDER BY DAY(`created_at`) ASC");
+$check_enivs = $conn->prepare("SELECT * FROM `users` WHERE `is_terminated` = 0 AND MONTH(`created_at`) = MONTH(CURTIME()) AND DAY(`created_at`) > DAY(CURTIME())  ORDER BY DAY(`created_at`) ASC");
 $check_enivs->execute();
 $check_enivs = $check_enivs->fetchAll(PDO::FETCH_ASSOC);
 
@@ -332,10 +332,10 @@ $sql = $conn->prepare("SELECT * FROM efficiency WHERE Date(`created_at`) >= CURD
               <div class="month">
                 <div class="d-flex gap-2 justify-content-center" style="flex-wrap: wrap;">
           <?php
-            $check_birthday = $conn->prepare("SELECT * FROM `users` WHERE DAYOFMONTH(`dob`) = DAYOFMONTH(CURDATE()) AND MONTH(`dob`) = MONTH(CURDATE()) ORDER BY `dob` DESC");
+            $check_birthday = $conn->prepare("SELECT * FROM `users` WHERE `is_terminated` = 0 AND DAYOFMONTH(`dob`) = DAYOFMONTH(CURDATE()) AND MONTH(`dob`) = MONTH(CURDATE()) ORDER BY `dob` DESC");
             $check_birthday->execute();
             $check_birthday = $check_birthday->fetchAll(PDO::FETCH_ASSOC);
-            $check_eniv = $conn->prepare("SELECT * FROM `users` WHERE DAYOFMONTH(`created_at`) = DAYOFMONTH(CURDATE()) AND MONTH(`created_at`) = MONTH(CURDATE())  ORDER BY `created_at` DESC");
+            $check_eniv = $conn->prepare("SELECT * FROM `users` WHERE `is_terminated` = 0 AND  DAYOFMONTH(`created_at`) = DAYOFMONTH(CURDATE()) AND MONTH(`created_at`) = MONTH(CURDATE())  ORDER BY `created_at` DESC");
             $check_eniv->execute();
             $check_eniv = $check_eniv->fetchAll(PDO::FETCH_ASSOC);
             if($check_birthday){

@@ -79,7 +79,8 @@
               $projectefficiency->execute([$user['id']]);
               $projectefficiency = $projectefficiency->fetch(PDO::FETCH_ASSOC);
               if($projectefficiency){
-                $status = ucfirst($projectefficiency['type']);
+                $type = $projectefficiency['task'] != '' ? ' ('.$projectefficiency['task'].')' : '';
+                $status = ucfirst($projectefficiency['type']).$type;
                 $cwork = $projectefficiency['project_name'];
               }else{
                 $assign = $conn->prepare("SELECT * FROM `assign` WHERE `user_id` = ? AND `status` = 'assign'");

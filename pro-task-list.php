@@ -1,28 +1,27 @@
 <?php
 
-  $page_name = 'pro-task-list';
-  include 'includes/header.php';
-  
+$page_name = 'pro-task-list';
+include 'includes/header.php';
 
-  $sql = $conn->prepare("SELECT * FROM `assign` WHERE `isActive` = 1 AND `status` = 'assign' AND `user_id` = ? AND `role` = 'pro'");
-  $sql->execute([$userId]);
-  $tasks = $sql->fetchAll(PDO::FETCH_ASSOC);
-  $countEmployee = count($tasks);
+$sql = $conn->prepare("SELECT * FROM `assign` JOIN  `tasks` ON `assign`.`task_id` =  `tasks`.`task_id` AND  `assign`.`project_id` =  `tasks`.`project_id` WHERE `isActive` = 1 AND `assign`.`status` = 'assign' AND `user_id` = ? AND `role` = 'pro' AND (`tasks`.`status` = 'assign_pro' OR `tasks`.`status` = 'pro_in_progress')");
+$sql->execute([$userId]);
+$tasks = $sql->fetchAll(PDO::FETCH_ASSOC);
+$countEmployee = count($tasks);
 
-  $vectorSQL = $conn->prepare("SELECT * FROM `assign` WHERE `isActive` = 1 AND `status` = 'assign' AND `user_id` = ? AND `role` = 'vector'");
-  $vectorSQL->execute([$userId]);
-  $vectorSQL = $vectorSQL->fetchAll(PDO::FETCH_ASSOC);
-  $countVector = count($vectorSQL);
+$vectorSQL = $conn->prepare("SELECT * FROM `assign` WHERE `isActive` = 1 AND `status` = 'assign' AND `user_id` = ? AND `role` = 'vector'");
+$vectorSQL->execute([$userId]);
+$vectorSQL = $vectorSQL->fetchAll(PDO::FETCH_ASSOC);
+$countVector = count($vectorSQL);
 
-  $QaSQL = $conn->prepare("SELECT * FROM `assign` WHERE `isActive` = 1 AND `status` = 'assign' AND `user_id` = ? AND `role` = 'qa'");
-  $QaSQL->execute([$userId]);
-  $QaSQL = $QaSQL->fetchAll(PDO::FETCH_ASSOC);
-  $countQa = count($QaSQL);
-  
-  $QcSQL = $conn->prepare("SELECT * FROM `assign` WHERE `isActive` = 1 AND `status` = 'assign' AND `user_id` = ? AND `role` = 'qc'");
-  $QcSQL->execute([$userId]);
-  $QcSQL = $QcSQL->fetchAll(PDO::FETCH_ASSOC);
-  $countQc = count($QcSQL);
+$QaSQL = $conn->prepare("SELECT * FROM `assign` WHERE `isActive` = 1 AND `status` = 'assign' AND `user_id` = ? AND `role` = 'qa'");
+$QaSQL->execute([$userId]);
+$QaSQL = $QaSQL->fetchAll(PDO::FETCH_ASSOC);
+$countQa = count($QaSQL);
+
+$QcSQL = $conn->prepare("SELECT * FROM `assign` WHERE `isActive` = 1 AND `status` = 'assign' AND `user_id` = ? AND `role` = 'qc'");
+$QcSQL->execute([$userId]);
+$QcSQL = $QcSQL->fetchAll(PDO::FETCH_ASSOC);
+$countQc = count($QcSQL);
 
 
 ?>
@@ -30,7 +29,7 @@
 <?php
 $title = 'Tasks List || EOM ';
 include 'settings/header.php'
-  ?>
+?>
 <style>
   table tbody td .close {
     background-color: rgb(170, 248, 218);
@@ -58,14 +57,14 @@ include 'settings/header.php'
     z-index: 9;
 
   }
-  .overflow{
+
+  .overflow {
     overflow: auto;
   }
 
-  .pro_in_progress{
+  .pro_in_progress {
     background-color: rgb(198 124 243) !important;
   }
-
 </style>
 
 <!-- start break Modal -->
@@ -128,40 +127,40 @@ include 'settings/header.php'
 
 <main style="margin-top: 100px;">
   <div class="btn-group   justify-content-center d-flex  mt-3 " role="group">
-        <a href="#" style="display: flex;align-items: center;margin: 0 10px">
-        <button type="button" class="btn btn-danger position-relative">
+    <a href="#" style="display: flex;align-items: center;margin: 0 10px">
+      <button type="button" class="btn btn-danger position-relative">
         PRO
         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-            <?php echo $countEmployee ?>
-            <span class="visually-hidden">unread messages</span>
+          <?php echo $countEmployee ?>
+          <span class="visually-hidden">unread messages</span>
         </span>
-        </button></a>
-        <a href="qc-task-list.php" style="display: flex;align-items: center;margin: 0 10px">
-        <button type="button" class="btn btn-primary position-relative">
+      </button></a>
+    <a href="qc-task-list.php" style="display: flex;align-items: center;margin: 0 10px">
+      <button type="button" class="btn btn-primary position-relative">
         QC
         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-            <?php echo $countQc ?>
-            <span class="visually-hidden">unread messages</span>
+          <?php echo $countQc ?>
+          <span class="visually-hidden">unread messages</span>
         </span>
-        </button></a>
-        <a href="qa-task-list.php" style="display: flex;align-items: center;margin: 0 10px">
-        <button type="button" class="btn btn-primary position-relative">
+      </button></a>
+    <a href="qa-task-list.php" style="display: flex;align-items: center;margin: 0 10px">
+      <button type="button" class="btn btn-primary position-relative">
         QA
         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-            <?php echo $countQa ?>
-            <span class="visually-hidden">unread messages</span>
+          <?php echo $countQa ?>
+          <span class="visually-hidden">unread messages</span>
         </span>
-        </button>
-        </a>
-        <a href="vector-task-list.php" style="display: flex;align-items: center;margin: 0 10px">
-        <button type="button" class="btn btn-primary position-relative">
+      </button>
+    </a>
+    <a href="vector-task-list.php" style="display: flex;align-items: center;margin: 0 10px">
+      <button type="button" class="btn btn-primary position-relative">
         Vector
         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-            <?php echo $countVector ?>
-            <span class="visually-hidden">unread messages</span>
+          <?php echo $countVector ?>
+          <span class="visually-hidden">unread messages</span>
         </span>
-        </button>
-        </a>
+      </button>
+    </a>
   </div>
   <div class="container-flude px-5 pt-1">
     <div class="d-flex" style="justify-content: flex-end;">
@@ -182,7 +181,7 @@ include 'settings/header.php'
               <div>
                 <div class="accordion-body">
                   <div>
-                  <p class="btn btn-success btn-sm" style="margin: 20px 0;" onclick="clickAllCheckboxes()"><i class="fa-solid fa-check-double" style="margin: 0 10px;"></i>Select All</p>
+                    <p class="btn btn-success btn-sm" style="margin: 20px 0;" onclick="clickAllCheckboxes()"><i class="fa-solid fa-check-double" style="margin: 0 10px;"></i>Select All</p>
                     <table class="table table-striped" id="dataTable">
                       <thead>
                         <tr>
@@ -206,21 +205,21 @@ include 'settings/header.php'
 
 
                           // is not check
-                          
+
                           $pause = $conn->prepare("SELECT * FROM `work_log` WHERE `user_id` = ? AND `task_id` = ? AND  `project_id` = ? AND `next_status` = 'Pause Work'");
-                          $pause->execute([$task['user_id'] , $task['task_id'] , $task['project_id']]);
+                          $pause->execute([$task['user_id'], $task['task_id'], $task['project_id']]);
                           $pause = $pause->fetch(PDO::FETCH_ASSOC);
-                          if($pause){
+                          if ($pause) {
                             $pause = 'Pause';
-                          }else{
+                          } else {
                             $pause = '';
                           }
 
-                           // is not check
+                          // is not check
 
-                          $sql5 = $conn->prepare('SELECT * FROM `tasks` WHERE `task_id` = ? AND `project_id` = ?');
-                          $sql5->execute([$task['task_id'],$task['project_id'] ]);
-                          $taskss = $sql5->fetch(PDO::FETCH_ASSOC);
+                          // $sql5 = $conn->prepare('SELECT * FROM `tasks` WHERE `task_id` = ? AND `project_id` = ?');
+                          // $sql5->execute([$task['task_id'], $task['project_id']]);
+                          // $taskss = $sql5->fetch(PDO::FETCH_ASSOC);
 
                           $sql4 = $conn->prepare('SELECT * FROM `projects` WHERE `id` = ?');
                           $sql4->execute([$task['project_id']]);
@@ -229,13 +228,13 @@ include 'settings/header.php'
                           $t_id = base64_encode($task['task_id']);
                           $p_id = base64_encode($task['project_id']);
 
-                          ?>
-                          <tr style="<?php echo $taskss['is_reassigned'] ? 'background: #e16767;' : ''; ?>">
-                          <td>
+                        ?>
+                          <tr style="<?php echo $task['is_reassigned'] ? 'background: #e16767;' : ''; ?>">
+                            <td>
                               <input type="checkbox" class="select_box" data-task="<?php echo $task['task_id'] ?>" data-project="<?php echo $task['project_id'] ?>" id="<?php echo $task['task_id'] ?>">
                             </td>
                             <th>
-                              <?php echo date('j M, Y h:i A', strtotime($task['created_at']) )?>
+                              <?php echo date('j M, Y h:i A', strtotime($task['created_at'])) ?>
                             </th>
                             <th>
                               <label for="<?php echo $task['task_id'] ?>">
@@ -245,23 +244,23 @@ include 'settings/header.php'
                             <th>
                               <?php echo $project['project_name'] ?>
                             </th>
-                            <?php if($pause){ ?>
-                            <td><span class="close" style="background:red;color:white">
-                                <?php echo $pause; ?>
-                            </td>
-                            <?php }else{ ?>
-                                <td>
-                                  <span class="close <?php echo $taskss['status'] ?>">
-                                    <?php echo str_replace('_', ' ', $taskss['status'])?>
-                                  </span>
-                                </td>
-                              <?php } ?>
+                            <?php if ($pause) { ?>
+                              <td><span class="close" style="background:red;color:white">
+                                  <?php echo $pause; ?>
+                              </td>
+                            <?php } else { ?>
+                              <td>
+                                <span class="close <?php echo $task['status'] ?>">
+                                  <?php echo str_replace('_', ' ', $task['status']) ?>
+                                </span>
+                              </td>
+                            <?php } ?>
                             <td>
                               <?php echo $user['first_name'] . ' ' . $user['last_name'] ?>
                             </td>
                             <td><a href="task-details.php?task_id=<?php echo $t_id ?>&project_id=<?php echo $p_id ?>">View Details</a></td>
                           </tr>
-                          <?php
+                        <?php
 
                         }
 
@@ -282,13 +281,12 @@ include 'settings/header.php'
 
 <?php include 'includes/footer.php' ?>
 <script>
-  
-  function clickAllCheckboxes(){
-  var checkboxes = document.querySelectorAll('.select_box');
-  checkboxes.forEach(function(checkbox) {
+  function clickAllCheckboxes() {
+    var checkboxes = document.querySelectorAll('.select_box');
+    checkboxes.forEach(function(checkbox) {
       checkbox.click();
-  });
-}
+    });
+  }
   const taskArray = [];
   const projectArray = [];
   $(document).on('change', '.select_box', function() {

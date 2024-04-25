@@ -268,6 +268,12 @@ $tasklist = $tasklist->fetchAll(PDO::FETCH_ASSOC);
                     <div class="tex">
                         <h4 id="feedback_time">Feedback Time : </h4>
                     </div>
+                    <div class="tex">
+                        <h4 id="training_time">Training Time : </h4>
+                    </div>
+                    <div class="tex">
+                        <h4 id="tasK_efficiency">Efficiency : </h4>
+                    </div>
                 </div>
             </div>
         </div>
@@ -527,9 +533,11 @@ $tasklist = $tasklist->fetchAll(PDO::FETCH_ASSOC);
                         var feedback_time = response.project_time.feedback;
                         var finalization_time = response.project_time.finalization;
                         var preparation_time = response.project_time.preparation;
+                        var training = response.project_time.training;
                         $('#preparation_time').text('Preparation Time : ' + convertMinutesToHoursAndMinutes(preparation_time));
                         $('#finalization_time').text('Finalization Time : ' + convertMinutesToHoursAndMinutes(finalization_time));
                         $('#feedback_time').text('Feedback Time : ' + convertMinutesToHoursAndMinutes(feedback_time));
+                        $('#training_time').text('Traning Time : ' + convertMinutesToHoursAndMinutes(training));
 
                         var protime = 0;
                         var qctime = 0;
@@ -617,8 +625,9 @@ $tasklist = $tasklist->fetchAll(PDO::FETCH_ASSOC);
                         $('#total_active_time').text(convertMinutesToHoursAndMinutes(response.active_time));
                         $('#total_break_time').text(convertMinutesToHoursAndMinutes(response.break));
                         $('#total_taken_time').text(convertMinutesToHoursAndMinutes(response.task));
-                        $('#total_remaning_time').text(convertMinutesToHoursAndMinutes(response.active_time - response.task - response.break - preparation_time - finalization_time - feedback_time));
+                        $('#total_remaning_time').text(convertMinutesToHoursAndMinutes(response.active_time - response.task - response.break - preparation_time - finalization_time - feedback_time - training));
                         $('#total_working_time').text(convertMinutesToHoursAndMinutes(qatime + qctime + protime + vectortime));
+                        $('#tasK_efficiency').text('Efficiency : ' + (((qatime + qctime + protime + vectortime) / response.task ) * 100).toFixed(2)+'%');
                     },
                     error: function(xhr, status, error) {
                         var errorMessage = xhr.responseJSON ? xhr.responseJSON.message : "Something went wrong.";

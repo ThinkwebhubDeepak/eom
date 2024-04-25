@@ -1,5 +1,5 @@
 <?php
-$page_name = 'finalization-task';
+$page_name = 'training-task';
 include "includes/header.php";
 if ($roleId != 1 && !(in_array($page_name, $pageAccessList))) {
     echo '<script>window.location.href = "index.php"</script>';
@@ -9,11 +9,9 @@ $sql = $conn->prepare('SELECT * FROM `projects` WHERE `is_complete` = 0 ORDER BY
 $sql->execute();
 $projects = $sql->fetchAll(PDO::FETCH_ASSOC);
 
-
-$finalization = $conn->prepare("SELECT * FROM `projectefficiency` WHERE `user_id` = ? AND `type` = 'finalization' AND `status` = 'start'");
-$finalization->execute([$_SESSION['userId']]);
-$finalization = $finalization->fetch(PDO::FETCH_ASSOC);
-
+$training = $conn->prepare("SELECT * FROM `projectefficiency` WHERE `user_id` = ? AND `type` = 'training' AND `status` = 'start'");
+$training->execute([$_SESSION['userId']]);
+$training = $training->fetch(PDO::FETCH_ASSOC);
 ?>
 <style>
     .hidden {
@@ -439,16 +437,17 @@ $finalization = $finalization->fetch(PDO::FETCH_ASSOC);
             transform: rotate(360deg);
         }
     }
+
     .modal {
         z-index: 3000;
     }
 </style>
-<div class="pre-loader <?php echo !($finalization) ? 'hidden' : '' ?>">
-    <button class="btn btn-warning complete-btn" onclick="completeFinalization()">Complete Finalization</button>
+<div class="pre-loader <?php echo !($training) ? 'hidden' : '' ?>">
+    <button class="btn btn-warning complete-btn" onclick="completetraining()">Complete training</button>
     <a class="btn btn-danger complete-btn" style="left:85%" data-bs-toggle="modal" data-bs-target="#breakModal" onclick="getBreak()" style="margin :0 5px">Break</a>
     <div id="cloud-intro"></div>
     <div class="drone">
-        <p class="loadingText">Finalization . . .</p>
+        <p class="loadingText">Training . . .</p>
         <div class="arm top-left-arm">
             <div class="prop"></div>
         </div>
@@ -464,21 +463,31 @@ $finalization = $finalization->fetch(PDO::FETCH_ASSOC);
     </div>
 </div>
 
-<main style="margin-top: 100px;" class="<?php echo ($finalization) ? 'hidden' : '' ?>">
+<main style="margin-top: 100px;" class="<?php echo ($training) ? 'hidden' : '' ?>">
     <div class="container-flude pt-5" div class="container-flude pt-5">
         <div class="container-flude px-5">
             <div class="d-flex justify-content-between " style="padding: 0 0 40px 0;">
-                <p class="fw-bold page_heading">Finalization Task</p>
+                <p class="fw-bold page_heading">Training</p>
                 <div style="display: flex; height:40px;">
                     <select name="project_id" id="project_id" class="form-control" style="margin :0 15px;">
                         <option value="">Search Project</option>
+                        <option value="0">R&D</option>
                         <?php
                         foreach ($projects as $value) {
                             echo '<option value="' . $value['id'] . '">' . $value['project_name'] . '</option>';
                         }
                         ?>
                     </select>
-                    <button style="margin:0 20px;width:300px" onclick="projectFinalization()" class="btn btn-warning">Start Finalization</button>
+                    <select name="task_type" id="task_type" class="form-control" style="margin :0 15px;">
+                        <option value="">Select Task</option>
+                        <option value="pro">Production</option>
+                        <option value="qc">Qc</option>
+                        <option value="qa">Qa</option>
+                        <option value="vector">Vector</option>
+                        <option value="R&D">R&D</option>
+                        <option value="feedback">Feedback</option>
+                    </select>
+                    <button style="margin:0 20px;width:300px" onclick="projecttraining()" class="btn btn-warning">Start</button>
                 </div>
             </div>
         </div>
@@ -509,8 +518,8 @@ $finalization = $finalization->fetch(PDO::FETCH_ASSOC);
                                         <option value="other">Other</option>
                                     </select>
                                     <input type="hidden" name="type" value="addOtherTaskBreak" required>
-                                    <input type="hidden" id="project_id" name="project_id" value="<?php echo $finalization['project_id'] ?>" required>
-                                    <input type="hidden" id="project_id" name="task_id" value="<?php echo $finalization['type'] ?>" required>
+                                    <input type="hidden" id="project_id" name="project_id" value="<?php echo $training['project_id'] ?>" required>
+                                    <input type="hidden" id="project_id" name="task_id" value="<?php echo $training['type'] ?>" required>
                                 </div>
                             </div>
 
@@ -546,7 +555,7 @@ $finalization = $finalization->fetch(PDO::FETCH_ASSOC);
 
 <?php include "includes/footer.php" ?>
 <script>
-     $('#break_type').change(function() {
+    $('#break_type').change(function() {
         var break_type = $('#break_type').val();
         if (break_type == 'team_meeting') {
             $('#team_meeting_box').html(` <div class="col-12 col-sm-6 p-2">
@@ -572,41 +581,47 @@ $finalization = $finalization->fetch(PDO::FETCH_ASSOC);
         }
     });
 
-    function projectFinalization() {
+    function projecttraining() {
         var project_id = $('#project_id').val();
+        var task_type = $('#task_type').val();
         if (project_id == '') {
             notyf.error('Select Project');
         } else {
-            $.ajax({
-                url: 'includes/settings/api/projectPreparationApi.php',
-                type: 'POST',
-                data: {
-                    type: 'projectFinalization',
-                    project_id: project_id
-                },
-                dataType: 'json',
-                success: function(response) {
-                    console.log(response);
-                    notyf.success(response.message);
-                    setTimeout(() => {
-                        location.reload();
-                    }, 1500);
-                },
-                error: function(xhr, status, error) {
-                    var errorMessage = xhr.responseJSON ? xhr.responseJSON.message : "Something went wrong.";
-                    notyf.error(errorMessage);
-                }
-            });
+            if (task_type == '') {
+                notyf.error('Select Task');
+            } else {
+                $.ajax({
+                    url: 'includes/settings/api/projectPreparationApi.php',
+                    type: 'POST',
+                    data: {
+                        type: 'projectTraining',
+                        project_id: project_id,
+                        task: task_type
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        console.log(response);
+                        notyf.success(response.message);
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1500);
+                    },
+                    error: function(xhr, status, error) {
+                        var errorMessage = xhr.responseJSON ? xhr.responseJSON.message : "Something went wrong.";
+                        notyf.error(errorMessage);
+                    }
+                });
+            }
         }
     }
 
-    function completeFinalization() {
+    function completetraining() {
         $.ajax({
             url: 'includes/settings/api/projectPreparationApi.php',
             type: 'POST',
             data: {
-                type: 'completeFinalization',
-                project_id: <?php echo $finalization['project_id'] ?? 0 ?>
+                type: 'completeTraining',
+                project_id: <?php echo $training['project_id'] ?? 0 ?>
             },
             dataType: 'json',
             success: function(response) {
@@ -622,6 +637,7 @@ $finalization = $finalization->fetch(PDO::FETCH_ASSOC);
             }
         });
     }
+
 
     $('#addBreak').submit(function(event) {
         event.preventDefault();

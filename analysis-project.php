@@ -259,6 +259,7 @@
                                                         $efficiency = round($time['totaltime']/$time['takentime'] * 100 , 2);
                                                     }else{
                                                         $efficiency = 0;
+                                                        continue;
                                                     }
                                                     
 

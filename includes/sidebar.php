@@ -30,10 +30,10 @@
                             </div>
                         <?php } ?>
                         <?php if ($roleId != 1) { ?>
-                            <a class="list-group-item list-group-item-action py-2 ripple <?php echo ($page_name == 'finalization-task' || $page_name == 'feedback-task' || $page_name == 'preparation-task') ? 'active' : '' ?>" data-bs-toggle="collapse" data-bs-target="#collapseWorkList" aria-expanded="false" aria-controls="collapseWorkList">
+                            <a class="list-group-item list-group-item-action py-2 ripple <?php echo ($page_name == 'finalization-task'  || $page_name == 'training-task' || $page_name == 'feedback-task' || $page_name == 'preparation-task') ? 'active' : '' ?>" data-bs-toggle="collapse" data-bs-target="#collapseOtherList" aria-expanded="false" aria-controls="collapseOtherList">
                                 <i class="fas fa-chart-area fa-fw me-1"></i><span>Other Task</span>
                             </a>
-                            <div class="collapse  <?php echo ($page_name == 'finalization-task' || $page_name == 'feedback-task' || $page_name == 'preparation-task')  ? 'show' : '' ?>" id="collapseWorkList">
+                            <div class="collapse  <?php echo ($page_name == 'finalization-task' || $page_name == 'feedback-task'  || $page_name == 'training-task' || $page_name == 'preparation-task')  ? 'show' : '' ?>" id="collapseOtherList">
                                 <div class="d-flex flex-column w-100 btn-group list-group collapse-btn">
 
                                 <?php if ($roleId == 1 || in_array('preparation-task', $pageAccessList)) { ?>
@@ -49,7 +49,11 @@
                                 <?php if ($roleId == 1 || in_array('feedback-task', $pageAccessList)) { ?>
 
                                     <a href="feedback-task.php" href="" class="btn  list-group-item list-group-item-action  ripple menu-option-open <?php echo $page_name == 'feedback-task' ? 'active' : '' ?>"><i class="fa-solid fa-bangladeshi-taka-sign me-1 ms-3"></i><span>Feedback</span></a>
-                                <?php } ?>      
+                                <?php } ?>    
+                                <?php if ($roleId == 1 || in_array('training-task', $pageAccessList)) { ?>
+
+                                    <a href="training-task.php" href="" class="btn  list-group-item list-group-item-action  ripple menu-option-open <?php echo $page_name == 'training-task' ? 'active' : '' ?>"><i class="fa-solid fa-bangladeshi-taka-sign me-1 ms-3"></i><span>Training</span></a>
+                                    <?php } ?>      
                                 </div>
                             </div>
                         <?php } ?>
